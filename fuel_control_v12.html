@@ -175,7 +175,7 @@
       <input type="number" id="rideDuration" placeholder="auto" min="10" max="600"
         style="width:80px;background:#2a2a2a;border:none;border-radius:8px;color:#eee;
         font-size:14px;padding:7px 10px;-webkit-appearance:none;appearance:none;" />
-      <div style="font-size:12px;color:#555;">min (optional — override if AI gets it wrong)</div>
+      <div style="font-size:12px;color:#555;">hrs (optional — override if AI gets it wrong)</div>
     </div>
   </div>
 
@@ -372,8 +372,8 @@
       ? products.map(function(p){ return p.name + ' (' + p.carbs + 'g carbs, ' + p.sodium + 'mg sodium per ' + p.unit + (p.ratio ? ', ' + p.ratio + ' ratio' : '') + ')'; }).join('\n')
       : 'No specific products selected — give general advice.';
 
-    var durationOverride = parseInt(document.getElementById('rideDuration').value);
-    var durationLine = isNaN(durationOverride) ? '' : 'Rider confirms total duration is exactly ' + durationOverride + ' minutes (' + Math.round(durationOverride/60*100)/100 + ' hours). Use this figure exactly — do not recalculate.\n';
+    var durationOverride = parseFloat(document.getElementById('rideDuration').value);
+    var durationLine = isNaN(durationOverride) ? '' : 'Rider confirms total duration is exactly ' + durationOverride + ' hours. Use this figure exactly — do not recalculate.\n';
 
     var prompt = 'You are a no-nonsense cycling nutritionist. A rider has described their ride and listed what they have available. Return ONLY a JSON object — no markdown, no explanation.\n\n' +
       'Ride: ' + desc + '\n' +

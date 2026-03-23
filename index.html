@@ -150,6 +150,7 @@
       <div class="logo-bar"></div>
     </div>
     <div class="sub">team oregon &mdash; use what you've got</div>
+    <div style="text-align:center;font-size:13px;color:#999;margin-top:8px;line-height:1.6;padding:0 8px;">Build a practical fueling plan from whatever's in your kit.<br>Brands, real food, DIY — hit your targets without guessing.</div>
   </div>
 
   <!-- DESCRIBE YOUR RIDE -->
@@ -279,6 +280,31 @@
       <div><div class="product-item-name">Onigiri / Rice Ball</div>
       <div class="product-item-detail">~35g · ~200mg sodium · each</div></div>
     </div>
+    <div class="product-item" data-product="dates" data-carbs="18" data-sodium="0" data-type="food" data-unit="date">
+      <div class="product-item-check"></div>
+      <div><div class="product-item-name">Medjool Date</div>
+      <div class="product-item-detail">~18g · ~0mg sodium · each · add a pinch of salt</div></div>
+    </div>
+    <div class="product-item" data-product="stroopwafel" data-carbs="30" data-sodium="75" data-type="food" data-unit="wafel">
+      <div class="product-item-check"></div>
+      <div><div class="product-item-name">Stroopwafel</div>
+      <div class="product-item-detail">~30g · ~75mg sodium · each</div></div>
+    </div>
+    <div class="product-item" data-product="maple" data-carbs="45" data-sodium="10" data-type="food" data-unit="flask">
+      <div class="product-item-check"></div>
+      <div><div class="product-item-name">Maple Syrup Flask (~3 tbsp)</div>
+      <div class="product-item-detail">~45g · ~10mg sodium · per flask · add a pinch of salt</div></div>
+    </div>
+    <div class="product-item" data-product="coke" data-carbs="25" data-sodium="35" data-type="food" data-unit="can">
+      <div class="product-item-check"></div>
+      <div><div class="product-item-name">Flat Coke (200ml)</div>
+      <div class="product-item-detail">~25g · ~35mg sodium · fast carbs, late race use</div></div>
+    </div>
+    <div class="product-item" data-product="applesauce" data-carbs="15" data-sodium="35" data-type="food" data-unit="pouch">
+      <div class="product-item-check"></div>
+      <div><div class="product-item-name">Applesauce Pouch</div>
+      <div class="product-item-detail">~15g · ~35mg sodium · per pouch · easy to eat at pace</div></div>
+    </div>
 
     <div class="product-group-label">DIY Mix (weigh it — don't guess)</div>
     <div class="product-item" data-product="diy-full" data-carbs="90" data-sodium="500" data-type="bottle" data-unit="bottle" data-ratio="2:1">
@@ -306,6 +332,7 @@
   <!-- GO -->
   <button type="button" class="cta" id="goBtn">Build My Plan</button>
   <div class="warning" id="warning">Describe your ride and pick conditions first.</div>
+  <div style="text-align:center;font-size:11px;color:#bbb;margin-top:12px;line-height:1.6;">Brand-neutral. Works with any product that hits the targets.<br>Always test fueling in training before race day.</div>
 
   <!-- THINKING -->
   <div class="thinking" id="thinking">
@@ -409,7 +436,8 @@
       '- DIY MIX: Some riders make their own — maltodextrin + table sugar + salt. This is completely legitimate, well-proven, and cheap. The key formula: 1:1 malto to table sugar by weight = 2:1 glucose:fructose ratio (because table sugar is 50/50 glucose/fructose). Proper recipes: 90g bottle = 60g malto + 30g table sugar + 500mg sodium. 60g bottle = 40g malto + 20g table sugar + 500mg sodium. Must be weighed — tablespoons are inaccurate. Performs identically to commercial products at a fraction of the cost. Treat it exactly the same as any commercial product.\n' +
       '- ROAD RACE LOGIC (2-4hr, variable intensity): Feed zones and teammates change the math. Bottles get swapped. Pockets full. Neutral sections and climbs are fueling windows. Start conservative, build intake as race progresses. Real food viable on steadier sections — bars, rice cakes, fig newtons. Gels for attacks and climbs. Sodium builds as a concern over duration. 2:1 products matter when intensity spikes.\n' +
       '- GRAVEL RACE LOGIC (3-5hr, sustained mixed terrain): Self-supported mostly, pockets loaded. Steady sustained effort with punchy climbs. Real food is your friend — potatoes, rice balls, fig newtons, gummy bears all work. Bottles are actually consumed not just rinsed. Hourly fueling is realistic. Sodium is critical over this duration especially with heat and dust. Pre-load before start, then steady intake every 20-30 min. Do not wait for hunger — already too late by then.\n' +
-      '- bottom_line should be direct and honest about THIS specific ride. No fluff.\n' +
+      '- GI DISTRESS: Never blame a specific product for GI issues. GI distress is almost never about the brand — it is about concentration, timing, intensity, and gut training. A $4 Maurten gel and a $2 Carbs Fuel gel will both cause problems if taken at 400w without warming up. If relevant, include in field notes: fuel early, keep concentration reasonable, do not pound carbs mid-hard effort.\n' +
+      '- BRAND NEUTRALITY: This tool is brand-neutral. Neversecond is the team sponsor and is featured, but the plan works equally well with any product that hits the carb and sodium targets. Never suggest one brand is nutritionally superior to another — the difference is cost, convenience, and personal tolerance.\n' +
       '- Return ONLY the JSON object. No preamble, no markdown fences.';
 
     document.getElementById('thinking').style.display = 'block';

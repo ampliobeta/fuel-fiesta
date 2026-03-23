@@ -157,6 +157,12 @@
   <div class="desc-card">
     <div class="desc-card-title">Describe your ride, race, or workout</div>
     <textarea id="rideDesc" placeholder="3 hrs Z2, 60 miles with 3000ft of climbing&#10;PIR circuit race, 1hr, fast and surgy&#10;&#10;or paste a TrainingPeaks / coach workout..."></textarea>
+    <div style="font-size:11px;color:#999;margin-top:10px;line-height:1.7;">
+      Include: duration · intensity · terrain · weather · bottle access · any stops<br>
+      <span style="color:#888;">e.g. "3hr gravel race, moderate temps, 2 bottles, one aid stop, hard final hour"</span><br>
+      <span style="color:#888;">e.g. "90min hard group ride, cool, one bottle, no stop"</span><br>
+      <span style="color:#888;">e.g. "Red R crit, 1hr, short punchy course, hot"</span>
+    </div>
     <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
       <div style="font-size:12px;color:#666;white-space:nowrap;">Ride duration:</div>
       <input type="number" id="rideDuration" placeholder="auto" min="10" max="600"
@@ -169,6 +175,7 @@
   <!-- CONDITIONS -->
   <div class="cond-card">
     <div class="cond-title">Conditions</div>
+    <div style="font-size:11px;color:#777;text-align:center;margin-bottom:10px;">Adjusts hydration and sodium targets based on heat and sweat loss</div>
     <div class="buttons">
       <button type="button" class="choice" data-group="temp" data-value="cool">Cool</button>
       <button type="button" class="choice" data-group="temp" data-value="moderate">Moderate</button>
@@ -436,6 +443,7 @@
       '- DIY MIX: Some riders make their own — maltodextrin + table sugar + salt. This is completely legitimate, well-proven, and cheap. The key formula: 1:1 malto to table sugar by weight = 2:1 glucose:fructose ratio (because table sugar is 50/50 glucose/fructose). Proper recipes: 90g bottle = 60g malto + 30g table sugar + 500mg sodium. 60g bottle = 40g malto + 20g table sugar + 500mg sodium. Must be weighed — tablespoons are inaccurate. Performs identically to commercial products at a fraction of the cost. Treat it exactly the same as any commercial product.\n' +
       '- ROAD RACE LOGIC (2-4hr, variable intensity): Feed zones and teammates change the math. Bottles get swapped. Pockets full. Neutral sections and climbs are fueling windows. Start conservative, build intake as race progresses. Real food viable on steadier sections — bars, rice cakes, fig newtons. Gels for attacks and climbs. Sodium builds as a concern over duration. 2:1 products matter when intensity spikes.\n' +
       '- GRAVEL RACE LOGIC (3-5hr, sustained mixed terrain): Self-supported mostly, pockets loaded. Steady sustained effort with punchy climbs. Real food is your friend — potatoes, rice balls, fig newtons, gummy bears all work. Bottles are actually consumed not just rinsed. Hourly fueling is realistic. Sodium is critical over this duration especially with heat and dust. Pre-load before start, then steady intake every 20-30 min. Do not wait for hunger — already too late by then.\n' +
+      '- PLANNING LOGIC: The plan balances carbs per hour, sodium needs, bottle constraints, what can realistically be carried, and reduced gut risk by fueling early. The output should feel like advice from a knowledgeable teammate, not a spreadsheet.\n' +
       '- GI DISTRESS: Never blame a specific product for GI issues. GI distress is almost never about the brand — it is about concentration, timing, intensity, and gut training. A $4 Maurten gel and a $2 Carbs Fuel gel will both cause problems if taken at 400w without warming up. If relevant, include in field notes: fuel early, keep concentration reasonable, do not pound carbs mid-hard effort.\n' +
       '- BRAND NEUTRALITY: This tool is brand-neutral. Neversecond is the team sponsor and is featured, but the plan works equally well with any product that hits the carb and sodium targets. Never suggest one brand is nutritionally superior to another — the difference is cost, convenience, and personal tolerance.\n' +
       '- Return ONLY the JSON object. No preamble, no markdown fences.';
@@ -489,6 +497,12 @@
     html += '<div class="result-carbs">' + p.carbs_per_hour + 'g carbs/hr</div>';
     html += '<div class="result-sodium">' + p.sodium_per_hour + 'mg sodium/hr</div>';
     html += '<div class="result-fluid">' + (p.fluid_per_hour || '') + '</div>';
+
+    // Simple summary line
+    var totalGels = (p.pack_list || []).filter(function(i){ return i.item.toLowerCase().indexOf('gel') !== -1; }).length;
+    html += '<div style="font-size:13px;opacity:.65;margin-top:8px;font-style:italic;">' +
+      'Target: ' + p.total_carbs + 'g carbs · ' + (p.total_sodium || '—') + 'mg sodium · ' + hours + 'hr ride' +
+      '</div>';
 
     html += '<div class="divider"></div>';
 

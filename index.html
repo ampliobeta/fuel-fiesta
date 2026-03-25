@@ -1,360 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Fuel Control</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23F47C4A'/><circle cx='16' cy='16' r='11' fill='white' opacity='0.25'/><circle cx='16' cy='16' r='7' fill='white' opacity='0.35'/><circle cx='16' cy='16' r='3.5' fill='white'/></svg>">
 <style>
-  :root {
-    --orange: #F47C4A;
-    --orange-dim: #EC7747;
-    --dark: #1f1f1f;
-    --text: #3A3A3A;
-    --muted: #6F6C6B;
-    --bg: #ECE9E7;
-    --surface: #F8F7F6;
-    --border: #D8D4D1;
-    --label: #6E6B6A;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  .wrap { max-width: 460px; margin: 0 auto; padding: 32px 16px 48px; }
+:root {
+  --orange: #F47C4A;
+  --orange-dim: #EC7747;
+  --dark: #1f1f1f;
+  --text: #3A3A3A;
+  --muted: #6F6C6B;
+  --bg: #ECE9E7;
+  --surface: #F8F7F6;
+  --border: #D8D4D1;
+  --label: #6E6B6A;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.wrap { max-width: 600px; margin: 0 auto; padding: 32px 16px 60px; }
 
-  .header { text-align: center; margin-bottom: 28px; }
-  .logo-line { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 4px; }
-  .logo-bar { width: 22px; height: 3px; background: var(--orange); border-radius: 2px; }
-  h1 { font-size: 32px; font-weight: 900; letter-spacing: 6px; margin: 0; color: #2A2826; text-transform: uppercase; }
-  .sub { font-size: 10px; letter-spacing: 3.5px; color: #9A9693; text-transform: uppercase; margin-top: 3px; }
-  .promise { font-size: 13px; color: #9A9693; margin-top: 10px; line-height: 1.6; padding: 0 12px; }
+/* HEADER */
+.header { text-align: center; margin-bottom: 28px; }
+.logo-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 3px; }
+.logo-bar { width: 22px; height: 3px; background: var(--orange); border-radius: 2px; }
+.wordmark { font-size: 28px; font-weight: 900; letter-spacing: 6px; color: #2A2826; text-transform: uppercase; }
+.tagline { font-size: 10px; letter-spacing: 3.5px; color: #9A9693; text-transform: uppercase; margin-top: 3px; }
+.promise { font-size: 13px; color: #9A9693; margin-top: 10px; line-height: 1.6; text-align: center; }
 
-  .card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 8px; }
+/* CARDS */
+.card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 8px; }
 
-  .sec-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--label); margin: 0 0 8px; display: block; }
-  .sec-helper { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.45; }
+.sec-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--label); display: block; margin-bottom: 8px; }
+.sec-helper { font-size: 13px; color: var(--muted); margin-bottom: 12px; line-height: 1.4; }
 
-  .card textarea {
-    width: 100%; min-height: 120px;
-    background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px;
-    color: var(--text); font-size: 15px; line-height: 1.6; padding: 14px; resize: none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    -webkit-appearance: none; transition: border-color .15s;
-  }
-  .card textarea::placeholder { color: #9A9693; font-size: 13px; line-height: 1.9; }
-  .card textarea:focus { outline: none; border-color: var(--orange); }
-  .micro { font-size: 12px; color: #A8A5A2; margin-top: 10px; line-height: 1.5; }
+/* TEXTAREA */
+.card textarea {
+  width: 100%; min-height: 110px; background: var(--surface);
+  border: 1.5px solid var(--border); border-radius: 10px;
+  color: var(--text); font-size: 15px; line-height: 1.6; padding: 14px; resize: none;
+  font-family: inherit; -webkit-appearance: none; transition: border-color .15s;
+}
+.card textarea::placeholder { color: #9A9693; font-size: 13px; line-height: 1.9; }
+.card textarea:focus { outline: none; border-color: var(--orange); }
+.micro { font-size: 11px; color: #A8A5A2; margin-top: 8px; line-height: 1.5; }
 
-  .seg { display: flex; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .choice {
-    flex: 1; height: 44px; border: none; border-right: 1.5px solid var(--border);
-    background: transparent; color: var(--text); font-size: 14px; font-weight: 600;
-    padding: 0 8px; cursor: pointer; text-align: center;
-    display: flex; align-items: center; justify-content: center;
-    -webkit-appearance: none; appearance: none; touch-action: manipulation;
-    user-select: none; -webkit-user-select: none; transition: background .1s, color .1s;
-  }
-  .choice:last-child { border-right: none; }
-  .choice:active { background: #eeedeb; }
-  .choice.active { background: var(--orange); color: #fff; font-weight: 700; }
-  .sweat-btn {
-    flex: 1; height: 44px; border: 1.5px solid var(--border); border-radius: 10px;
-    background: var(--surface); color: var(--text); font-size: 14px; font-weight: 600;
-    padding: 0 8px; cursor: pointer; text-align: center;
-    display: flex; align-items: center; justify-content: center;
-    -webkit-appearance: none; appearance: none; touch-action: manipulation;
-    user-select: none; -webkit-user-select: none; transition: all .1s;
-  }
-  .sweat-btn.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+/* SEGMENTED */
+.seg { display: flex; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+.seg-btn {
+  flex: 1; height: 44px; border: none; border-right: 1.5px solid var(--border);
+  background: transparent; color: var(--text); font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  -webkit-appearance: none; touch-action: manipulation; user-select: none;
+  transition: background .1s, color .1s;
+}
+.seg-btn:last-child { border-right: none; }
+.seg-btn.active { background: var(--orange); color: #fff; font-weight: 700; }
+.seg-btn:not(.active):active { background: #eeedeb; }
 
-  .kit-group { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-    color: #C0BCB9; margin: 14px 0 6px; }
-  .product-item {
-    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-    background: var(--surface); border-radius: 10px; margin-bottom: 4px;
-    border: 1.5px solid var(--border); cursor: pointer;
-    transition: border-color .1s; touch-action: manipulation;
-    user-select: none; -webkit-user-select: none;
-  }
-  .product-item.selected { border-color: var(--orange); background: #FFF4F0; }
-  .product-item-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--border);
-    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #fff; transition: background .1s, border-color .1s; }
-  .product-item.selected .product-item-check { background: var(--orange); border-color: var(--orange); }
-  .product-item-name { font-size: 14px; font-weight: 700; color: var(--text); }
-  .product-item-detail { font-size: 11px; color: var(--muted); margin-top: 1px; }
-  .sponsor-badge { display: inline-block; background: var(--orange); color: #fff; font-size: 9px;
-    font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 2px 5px;
-    border-radius: 3px; margin-left: 5px; vertical-align: middle; }
+/* PAIR BUTTONS */
+.pair-btns { display: flex; gap: 8px; }
+.pair-btn {
+  flex: 1; height: 44px; border: 1.5px solid var(--border); border-radius: 10px;
+  background: var(--surface); color: var(--text); font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  -webkit-appearance: none; touch-action: manipulation; user-select: none;
+  transition: all .1s;
+}
+.pair-btn.active { background: var(--orange); color: #fff; border-color: var(--orange); }
 
-  .cta {
-    width: 100%; border: none; border-radius: 12px; background: var(--orange); color: #fff;
-    padding: 17px 16px; font-size: 17px; font-weight: 900; letter-spacing: 2.5px;
-    text-transform: uppercase; cursor: pointer; display: block;
-    -webkit-appearance: none; touch-action: manipulation; transition: background .1s;
-  }
-  .cta:active { background: var(--orange-dim); }
-  .warning { display: none; margin-top: 10px; color: #b42318; font-size: 13px; text-align: center; }
-  .fine { text-align: center; font-size: 11px; color: #B8B4B1; margin-top: 12px; line-height: 1.7; }
+/* KIT SUMMARY */
+.kit-summary { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 16px; margin-bottom: 8px; }
+.kit-summary-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.kit-summary-title { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--label); }
+.kit-totals { display: flex; gap: 14px; }
+.kit-total { font-size: 12px; font-weight: 700; color: var(--muted); }
+.kit-total span { color: var(--orange); font-weight: 800; }
+.kit-empty { font-size: 13px; color: #B0ACA9; font-style: italic; }
+.selected-tags { display: flex; flex-direction: column; gap: 4px; }
+.selected-tag {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #FFF4F0; border: 1px solid #F4C4AA; border-radius: 8px; padding: 7px 10px;
+}
+.tag-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.tag-info { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.tag-remove {
+  width: 22px; height: 22px; border: none; background: none; color: #C8845A;
+  font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; line-height: 1; padding: 0; margin-left: 8px;
+}
 
-  .thinking { display: none; margin-top: 8px; background: var(--dark); border-radius: 16px; padding: 22px; text-align: center; }
-  .thinking-text { color: #aaa; font-size: 14px; margin-bottom: 12px; }
-  .dots { display: inline-flex; gap: 6px; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--orange); animation: blink 1.2s infinite; }
-  .dot:nth-child(2) { animation-delay: .2s; }
-  .dot:nth-child(3) { animation-delay: .4s; }
-  @keyframes blink { 0%,80%,100%{opacity:.15} 40%{opacity:1} }
+/* SEARCH */
+.search-wrap { margin-bottom: 10px; }
+.search-input {
+  width: 100%; background: #fff; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 11px 14px; font-size: 14px; color: var(--text);
+  font-family: inherit;
+}
+.search-input:focus { outline: none; border-color: var(--orange); }
+.search-input::placeholder { color: #B0ACA9; }
 
-  .result { display: none; margin-top: 8px; background: var(--orange); color: #111; border-radius: 16px; padding: 22px 20px 20px; }
-  .result-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; opacity: .4; margin-bottom: 6px; }
-  .result-workout-summary { font-size: 13px; font-weight: 500; margin-bottom: 14px; opacity: .7; line-height: 1.4; }
-  .result-carbs { font-size: 44px; font-weight: 900; line-height: 1.0; margin-bottom: 2px; color: #1a0a04; }
-  .result-sodium { font-size: 22px; font-weight: 700; opacity: .85; }
-  .result-fluid { font-size: 15px; font-weight: 600; opacity: .6; margin-top: 2px; }
-  .divider { height: 1px; background: rgba(0,0,0,.1); margin: 16px 0; }
-  .section-label { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; opacity: .35; margin-bottom: 8px; }
-  .pack-list { display: flex; flex-direction: column; gap: 2px; }
-  .pack-item { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; font-weight: 700; line-height: 1.5; color: #1a0a04; }
-  .pack-item-sub { font-size: 12px; font-weight: 400; opacity: .55; margin-bottom: 4px; }
-  .pack-note { font-size: 13px; opacity: .6; margin-top: 10px; line-height: 1.5; }
-  .field-notes { margin: 0; padding: 0; list-style: none; }
-  .field-notes li { font-size: 14px; line-height: 1.7; color: rgba(0,0,0,.75); }
-  .field-notes li::before { content: '· '; opacity: .5; }
-  .tagline { font-style: italic; font-size: 13px; opacity: .35; margin-top: 16px; text-align: right; color: #1a0a04; }
+/* FILTER CHIPS */
+.filter-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.chip {
+  height: 30px; padding: 0 12px; border: 1.5px solid var(--border); border-radius: 20px;
+  background: #fff; color: var(--muted); font-size: 12px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; -webkit-appearance: none;
+  touch-action: manipulation; transition: all .1s;
+}
+.chip.active { background: var(--orange); color: #fff; border-color: var(--orange); }
 
-  .reset-btn {
-    display: none; width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
-    background: transparent; color: var(--muted); padding: 13px;
-    font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-    cursor: pointer; margin-top: 8px; -webkit-appearance: none; touch-action: manipulation;
-  }
+/* ACCORDION */
+.accordion { background: #fff; border: 1px solid var(--border); border-radius: 14px; margin-bottom: 6px; overflow: hidden; }
+.accordion-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 16px; cursor: pointer; user-select: none; -webkit-user-select: none;
+}
+.accordion-hdr:active { background: #faf9f8; }
+.acc-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--label); }
+.acc-meta { display: flex; align-items: center; gap: 8px; }
+.acc-count { font-size: 11px; color: #B0ACA9; font-weight: 600; }
+.acc-chevron { font-size: 10px; color: #C0BCB9; transition: transform .2s; }
+.accordion.open .acc-chevron { transform: rotate(180deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+.accordion.open .accordion-body { max-height: 2000px; }
+.accordion-inner { padding: 0 10px 10px; }
+
+/* PRODUCT ROWS */
+.product-row {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+  background: var(--surface); border-radius: 9px; margin-bottom: 4px;
+  border: 1.5px solid var(--border); cursor: pointer;
+  transition: border-color .1s, background .1s; touch-action: manipulation;
+  user-select: none; -webkit-user-select: none;
+}
+.product-row.selected { border-color: var(--orange); background: #FFF4F0; }
+.product-row.hidden { display: none; }
+.pcheck {
+  width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--border);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff; transition: all .1s;
+}
+.product-row.selected .pcheck { background: var(--orange); border-color: var(--orange); }
+.pinfo { flex: 1; min-width: 0; }
+.pname { font-size: 13px; font-weight: 700; color: var(--text); }
+.pbadges { display: flex; gap: 4px; margin-top: 3px; flex-wrap: wrap; }
+.badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.b-carb { background: #EEF4FF; color: #3B6CB5; }
+.b-sodium { background: #FFF4EE; color: #C06030; }
+.b-warn { background: #FFF0EE; color: #b42318; }
+.b-sponsor { background: var(--orange); color: #fff; }
+.b-ratio { background: #F0F8EE; color: #3B7B35; }
+
+/* CTA */
+.cta {
+  width: 100%; border: none; border-radius: 12px; background: var(--orange); color: #fff;
+  padding: 17px 16px; font-size: 17px; font-weight: 900; letter-spacing: 2.5px;
+  text-transform: uppercase; cursor: pointer; -webkit-appearance: none;
+  touch-action: manipulation; transition: background .1s; display: block;
+}
+.cta:active { background: var(--orange-dim); }
+.warning { display: none; margin-top: 8px; color: #b42318; font-size: 13px; text-align: center; }
+.fine { text-align: center; font-size: 11px; color: #B8B4B1; margin-top: 12px; line-height: 1.7; }
+
+/* THINKING */
+.thinking { display: none; margin-top: 8px; background: var(--dark); border-radius: 16px; padding: 22px; text-align: center; }
+.thinking-text { color: #aaa; font-size: 14px; margin-bottom: 12px; }
+.dots { display: inline-flex; gap: 6px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--orange); animation: blink 1.2s infinite; }
+.dot:nth-child(2) { animation-delay: .2s; }
+.dot:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,80%,100%{opacity:.15} 40%{opacity:1} }
+
+/* RESULT */
+.result { display: none; margin-top: 8px; background: var(--orange); color: #111; border-radius: 16px; padding: 22px 20px 20px; }
+.re { font-size: 10px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; opacity: .4; margin-bottom: 6px; }
+.rs { font-size: 13px; font-weight: 500; margin-bottom: 14px; opacity: .7; line-height: 1.4; }
+.rbig { font-size: 44px; font-weight: 900; line-height: 1.0; margin-bottom: 2px; color: #1a0a04; }
+.rmed { font-size: 22px; font-weight: 700; opacity: .85; }
+.rsm { font-size: 15px; font-weight: 600; opacity: .6; margin-top: 2px; }
+.rtarget { font-size: 12px; opacity: .45; margin-top: 6px; font-style: italic; }
+.rdiv { height: 1px; background: rgba(0,0,0,.1); margin: 14px 0; }
+.rsec { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; opacity: .35; margin-bottom: 8px; }
+.pack-list { display: flex; flex-direction: column; gap: 2px; }
+.pack-item { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; font-weight: 700; line-height: 1.5; color: #1a0a04; }
+.pack-sub { font-size: 11px; font-weight: 400; opacity: .55; margin-bottom: 4px; }
+.pack-note { font-size: 13px; opacity: .6; margin-top: 10px; line-height: 1.5; }
+.fnotes { margin: 0; padding: 0; list-style: none; }
+.fnotes li { font-size: 13px; line-height: 1.7; color: rgba(0,0,0,.75); }
+.fnotes li::before { content: '· '; opacity: .5; }
+.tagline { font-style: italic; font-size: 12px; opacity: .35; margin-top: 14px; text-align: right; color: #1a0a04; }
+
+.reset-btn {
+  display: none; width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
+  background: transparent; color: var(--muted); padding: 12px;
+  font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; margin-top: 8px; -webkit-appearance: none; touch-action: manipulation;
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="header">
-    <div class="logo-line">
-      <div class="logo-bar"></div>
-      <h1>Fuel Control</h1>
-      <div class="logo-bar"></div>
-    </div>
-    <div class="sub">Team Oregon &mdash; use what you've got</div>
+    <div class="logo-row"><div class="logo-bar"></div><div class="wordmark">Fuel Control</div><div class="logo-bar"></div></div>
+    <div class="tagline">Team Oregon &mdash; use what you've got</div>
     <div class="promise">Build a practical fueling plan from whatever's in your kit.<br>Brands, real food, DIY &mdash; hit your targets without guessing.</div>
   </div>
 
+  <!-- 1. DESCRIBE -->
   <div class="card">
     <span class="sec-label">Describe your ride, race, or workout</span>
     <textarea id="rideDesc" placeholder="e.g. 2hr Z2, easy spin, one bottle, cool&#10;e.g. 3hr gravel race, 2 bottles, aid stop at mile 20, hard finish&#10;e.g. 5hr ride, hydration pack + 1 bottle, refill at café&#10;e.g. Red R crit, 1hr, hot, no stops&#10;&#10;or paste a TrainingPeaks / coach workout..."></textarea>
     <div class="micro">Include: duration &middot; intensity &middot; terrain &middot; conditions &middot; bottle access &middot; stops</div>
   </div>
 
+  <!-- 2. CONDITIONS -->
   <div class="card">
     <span class="sec-label">Conditions</span>
     <div class="sec-helper">Adjusts hydration and sodium targets based on heat and sweat loss</div>
     <div class="seg">
-      <button type="button" class="choice" data-group="temp" data-value="cool">Cool</button>
-      <button type="button" class="choice" data-group="temp" data-value="moderate">Moderate</button>
-      <button type="button" class="choice" data-group="temp" data-value="hot">Hot</button>
+      <button type="button" class="seg-btn" data-group="temp" data-value="cool">Cool</button>
+      <button type="button" class="seg-btn" data-group="temp" data-value="moderate">Moderate</button>
+      <button type="button" class="seg-btn" data-group="temp" data-value="hot">Hot</button>
     </div>
   </div>
 
+  <!-- 3. SALTY SWEATER -->
   <div class="card">
     <span class="sec-label">Salty sweater?</span>
     <div class="sec-helper">Do you cramp or see salt crust on your kit after hard rides?</div>
-    <div style="display:flex;gap:8px;">
-      <button type="button" class="sweat-btn choice" data-group="sweat" data-value="normal">No &mdash; standard</button>
-      <button type="button" class="sweat-btn choice" data-group="sweat" data-value="salty">Yes &mdash; salty sweater</button>
+    <div class="pair-btns">
+      <button type="button" class="pair-btn" data-group="sweat" data-value="normal">No &mdash; standard</button>
+      <button type="button" class="pair-btn" data-group="sweat" data-value="salty">Yes &mdash; salty sweater</button>
     </div>
   </div>
 
+  <!-- 4. GUT TRAINED -->
   <div class="card">
     <span class="sec-label">Gut trained?</span>
     <div class="sec-helper">Can you absorb high carbs without GI issues? Trained athletes can push beyond 90g/hr.</div>
-    <div style="display:flex;gap:8px;">
-      <button type="button" class="sweat-btn choice" data-group="gut" data-value="standard">Standard &mdash; up to 90g/hr</button>
-      <button type="button" class="sweat-btn choice" data-group="gut" data-value="trained">Gut trained &mdash; up to 120g/hr</button>
+    <div class="pair-btns">
+      <button type="button" class="pair-btn" data-group="gut" data-value="standard">Standard &mdash; up to 90g/hr</button>
+      <button type="button" class="pair-btn" data-group="gut" data-value="trained">Gut trained &mdash; up to 120g/hr</button>
     </div>
   </div>
 
-  <div class="card">
-    <span class="sec-label">What's in your kit</span>
-
-    <div class="kit-group">Bottles / Mix</div>
-    <div class="product-item" data-product="ns-c90" data-carbs="90" data-sodium="600" data-type="bottle" data-unit="bottle" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Neversecond C90 <span class="sponsor-badge">Team Sponsor</span></div>
-      <div class="product-item-detail">90g · 600mg sodium · per bottle · 2:1 ratio</div></div>
+  <!-- 5. KIT BUILDER -->
+  <div class="kit-summary">
+    <div class="kit-summary-row">
+      <div class="kit-summary-title">Selected kit</div>
+      <div class="kit-totals">
+        <div class="kit-total">Carbs: <span id="totalCarbs">—</span>g</div>
+        <div class="kit-total">Sodium: <span id="totalSodium">—</span>mg</div>
+      </div>
     </div>
-    <div class="product-item" data-product="ns-c30-drink" data-carbs="30" data-sodium="200" data-type="bottle" data-unit="scoop" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Neversecond C30 Sports Drink</div>
-      <div class="product-item-detail">30g · 200mg sodium · per scoop · 2:1 ratio</div></div>
-    </div>
-    <div class="product-item" data-product="f369" data-carbs="30" data-sodium="200" data-type="bottle" data-unit="scoop" data-ratio="1:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Formula 369</div>
-      <div class="product-item-detail">30g · 200mg sodium · per scoop · 1:1 ratio</div></div>
-    </div>
-    <div class="product-item" data-product="skratch" data-carbs="40" data-sodium="380" data-type="bottle" data-unit="scoop" data-ratio="1:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Skratch Sport Hydration</div>
-      <div class="product-item-detail">40g · 380mg sodium · per serving</div></div>
-    </div>
-    <div class="product-item" data-product="tailwind" data-carbs="25" data-sodium="303" data-type="bottle" data-unit="scoop" data-ratio="1:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Tailwind Endurance Fuel</div>
-      <div class="product-item-detail">25g · 303mg sodium · per scoop</div></div>
-    </div>
-    <div class="product-item" data-product="tailwind-hc" data-carbs="90" data-sodium="660" data-type="bottle" data-unit="bottle" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Tailwind High Carb Fuel</div>
-      <div class="product-item-detail">90g · 660mg sodium · per bottle · 2:1 ratio</div></div>
-    </div>
-
-    <div class="kit-group">Gels</div>
-    <div class="product-item" data-product="ns-c30-gel" data-carbs="30" data-sodium="200" data-type="gel" data-unit="gel" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Neversecond C30 Gel <span class="sponsor-badge">Team Sponsor</span></div>
-      <div class="product-item-detail">30g · 200mg sodium · per gel · 2:1 ratio</div></div>
-    </div>
-    <div class="product-item" data-product="carbsfuel" data-carbs="50" data-sodium="105" data-type="gel" data-unit="gel" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Carbs Fuel Gel (Original)</div>
-      <div class="product-item-detail">50g · 105mg sodium · per gel · 2:1 ratio</div></div>
-    </div>
-    <div class="product-item" data-product="carbsfuel-salted" data-carbs="50" data-sodium="450" data-type="gel" data-unit="gel" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Carbs Fuel Gel (Salted)</div>
-      <div class="product-item-detail">50g · 450mg sodium · per gel · 2:1 ratio</div></div>
-    </div>
-    <div class="product-item" data-product="gu" data-carbs="22" data-sodium="60" data-type="gel" data-unit="gel" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">GU Energy Gel</div>
-      <div class="product-item-detail">22g · 60mg sodium · per gel</div></div>
-    </div>
-    <div class="product-item" data-product="precision-pf30" data-carbs="30" data-sodium="0" data-type="gel" data-unit="gel" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Precision Fuel PF30</div>
-      <div class="product-item-detail">30g · 0mg sodium · per gel <span style="color:#b42318;font-size:11px;">⚠ no sodium</span></div></div>
-    </div>
-    <div class="product-item" data-product="sis" data-carbs="22" data-sodium="10" data-type="gel" data-unit="gel" data-ratio="1:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">SIS GO Isotonic Gel</div>
-      <div class="product-item-detail">22g · 10mg sodium · per gel <span style="color:#b42318;font-size:11px;">⚠ very low sodium</span></div></div>
-    </div>
-    <div class="product-item" data-product="hammer" data-carbs="22" data-sodium="25" data-type="gel" data-unit="gel" data-ratio="1:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Hammer Gel</div>
-      <div class="product-item-detail">22g · 25mg sodium · per gel <span style="color:#b42318;font-size:11px;">⚠ very low sodium</span></div></div>
-    </div>
-
-    <div class="kit-group">Bars</div>
-    <div class="product-item" data-product="clifbar" data-carbs="45" data-sodium="115" data-type="food" data-unit="bar">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Clif Bar</div>
-      <div class="product-item-detail">45g · 115mg sodium · per bar · good for steady sections</div></div>
-    </div>
-    <div class="product-item" data-product="probar" data-carbs="45" data-sodium="170" data-type="food" data-unit="bar">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">ProBar Meal Bar</div>
-      <div class="product-item-detail">~45g · ~170mg sodium · per bar · dense, long rides</div></div>
-    </div>
-    <div class="product-item" data-product="rxbar" data-carbs="23" data-sodium="200" data-type="food" data-unit="bar">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">RXBar</div>
-      <div class="product-item-detail">23g · 200mg sodium · per bar · protein-forward, lower carb</div></div>
-    </div>
-    <div class="product-item" data-product="larabar" data-carbs="26" data-sodium="25" data-type="food" data-unit="bar">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Larabar</div>
-      <div class="product-item-detail">26g · ~25mg sodium · per bar <span style="color:#b42318;font-size:11px;">⚠ very low sodium</span></div></div>
-    </div>
-
-    <div class="kit-group">Real Food</div>
-    <div class="product-item" data-product="fignewton" data-carbs="11" data-sodium="50" data-type="food" data-unit="cookie">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Fig Newton</div>
-      <div class="product-item-detail">11g · 50mg sodium · per cookie</div></div>
-    </div>
-    <div class="product-item" data-product="banana" data-carbs="27" data-sodium="1" data-type="food" data-unit="banana">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Banana</div>
-      <div class="product-item-detail">27g · 1mg sodium · each</div></div>
-    </div>
-    <div class="product-item" data-product="ricecake" data-carbs="30" data-sodium="100" data-type="food" data-unit="cake">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Rice Cake</div>
-      <div class="product-item-detail">~30g · ~100mg sodium · each</div></div>
-    </div>
-    <div class="product-item" data-product="potato" data-carbs="15" data-sodium="5" data-type="food" data-unit="potato">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Boiled Potato (small)</div>
-      <div class="product-item-detail">~15g · ~5mg sodium · each · add salt!</div></div>
-    </div>
-    <div class="product-item" data-product="gummybears" data-carbs="22" data-sodium="10" data-type="food" data-unit="handful">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Gummy Bears (~10)</div>
-      <div class="product-item-detail">~22g · ~10mg sodium · per handful</div></div>
-    </div>
-    <div class="product-item" data-product="onigiri" data-carbs="35" data-sodium="200" data-type="food" data-unit="onigiri">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Onigiri / Rice Ball</div>
-      <div class="product-item-detail">~35g · ~200mg sodium · each</div></div>
-    </div>
-    <div class="product-item" data-product="dates" data-carbs="18" data-sodium="0" data-type="food" data-unit="date">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Medjool Date</div>
-      <div class="product-item-detail">~18g · ~0mg sodium · each · add a pinch of salt</div></div>
-    </div>
-    <div class="product-item" data-product="stroopwafel" data-carbs="30" data-sodium="75" data-type="food" data-unit="wafel">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Stroopwafel</div>
-      <div class="product-item-detail">~30g · ~75mg sodium · each</div></div>
-    </div>
-    <div class="product-item" data-product="maple" data-carbs="45" data-sodium="10" data-type="food" data-unit="flask">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Maple Syrup Flask (~3 tbsp)</div>
-      <div class="product-item-detail">~45g · ~10mg sodium · per flask · add a pinch of salt</div></div>
-    </div>
-    <div class="product-item" data-product="coke" data-carbs="25" data-sodium="35" data-type="food" data-unit="can">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Flat Coke (200ml)</div>
-      <div class="product-item-detail">~25g · ~35mg sodium · fast carbs, late race use</div></div>
-    </div>
-    <div class="product-item" data-product="applesauce" data-carbs="15" data-sodium="35" data-type="food" data-unit="pouch">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Applesauce Pouch</div>
-      <div class="product-item-detail">~15g · ~35mg sodium · easy to eat at pace</div></div>
-    </div>
-
-    <div class="kit-group">DIY Mix (weigh it — don't guess)</div>
-    <div class="product-item" data-product="diy-full" data-carbs="90" data-sodium="500" data-type="bottle" data-unit="bottle" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">DIY High Carb Bottle (90g)</div>
-      <div class="product-item-detail">60g malto + 30g table sugar + ¼ tsp salt · ~90g carbs · ~500mg sodium · 2:1 ratio</div></div>
-    </div>
-    <div class="product-item" data-product="diy-light" data-carbs="60" data-sodium="500" data-type="bottle" data-unit="bottle" data-ratio="2:1">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">DIY Light Bottle (60g)</div>
-      <div class="product-item-detail">40g malto + 20g table sugar + ¼ tsp salt · ~60g carbs · ~500mg sodium · 2:1 ratio</div></div>
-    </div>
-
-    <div class="kit-group">Sodium Add-ons</div>
-    <div class="product-item" data-product="ns-s200" data-carbs="0" data-sodium="200" data-type="sodium" data-unit="scoop">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Neversecond S200 Sodium Booster</div>
-      <div class="product-item-detail">0g carbs · 200mg sodium · per scoop</div></div>
-    </div>
-    <div class="product-item" data-product="saltcap" data-carbs="0" data-sodium="200" data-type="sodium" data-unit="cap">
-      <div class="product-item-check"></div>
-      <div><div class="product-item-name">Salt Cap / Electrolyte Tab</div>
-      <div class="product-item-detail">0g carbs · ~200mg sodium · per cap</div></div>
-    </div>
+    <div id="selectedList"><div class="kit-empty">No items selected — pick from the list below</div></div>
   </div>
 
-  <div class="card">
+  <div class="search-wrap">
+    <input type="search" class="search-input" id="searchInput" placeholder="Search products..."/>
+  </div>
+
+  <div class="filter-chips">
+    <button class="chip active" data-filter="all">All</button>
+    <button class="chip" data-filter="bottle">Drink Mix</button>
+    <button class="chip" data-filter="gel">Gels</button>
+    <button class="chip" data-filter="bar">Bars</button>
+    <button class="chip" data-filter="food">Real Food</button>
+    <button class="chip" data-filter="diy">DIY</button>
+    <button class="chip" data-filter="sodium">Sodium</button>
+  </div>
+
+  <!-- DRINK MIX -->
+  <div class="accordion open" data-category="bottle">
+    <div class="accordion-hdr"><div class="acc-title">Drink Mix / Bottles</div><div class="acc-meta"><span class="acc-count" id="count-bottle"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="ns-c90" data-carbs="90" data-sodium="600" data-type="bottle" data-unit="bottle" data-ratio="2:1" data-name="Neversecond C90">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Neversecond C90</div><div class="pbadges"><span class="badge b-sponsor">Team Sponsor</span><span class="badge b-carb">90g</span><span class="badge b-sodium">600mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="ns-c30-drink" data-carbs="30" data-sodium="200" data-type="bottle" data-unit="scoop" data-ratio="2:1" data-name="Neversecond C30 Sports Drink">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Neversecond C30 Sports Drink</div><div class="pbadges"><span class="badge b-sponsor">Team Sponsor</span><span class="badge b-carb">30g/scoop</span><span class="badge b-sodium">200mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="f369" data-carbs="30" data-sodium="200" data-type="bottle" data-unit="scoop" data-ratio="1:1" data-name="Formula 369">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Formula 369</div><div class="pbadges"><span class="badge b-carb">30g/scoop</span><span class="badge b-sodium">200mg Na</span><span class="badge b-ratio">1:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="skratch" data-carbs="40" data-sodium="380" data-type="bottle" data-unit="scoop" data-ratio="1:1" data-name="Skratch Sport Hydration">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Skratch Sport Hydration</div><div class="pbadges"><span class="badge b-carb">40g/scoop</span><span class="badge b-sodium">380mg Na</span><span class="badge b-ratio">1:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="tailwind" data-carbs="25" data-sodium="303" data-type="bottle" data-unit="scoop" data-name="Tailwind Endurance Fuel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Tailwind Endurance Fuel</div><div class="pbadges"><span class="badge b-carb">25g/scoop</span><span class="badge b-sodium">303mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="tailwind-hc" data-carbs="90" data-sodium="660" data-type="bottle" data-unit="bottle" data-ratio="2:1" data-name="Tailwind High Carb Fuel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Tailwind High Carb Fuel</div><div class="pbadges"><span class="badge b-carb">90g/bottle</span><span class="badge b-sodium">660mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- GELS -->
+  <div class="accordion" data-category="gel">
+    <div class="accordion-hdr"><div class="acc-title">Gels</div><div class="acc-meta"><span class="acc-count" id="count-gel"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="ns-c30-gel" data-carbs="30" data-sodium="200" data-type="gel" data-unit="gel" data-ratio="2:1" data-name="Neversecond C30 Gel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Neversecond C30 Gel</div><div class="pbadges"><span class="badge b-sponsor">Team Sponsor</span><span class="badge b-carb">30g</span><span class="badge b-sodium">200mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="carbsfuel" data-carbs="50" data-sodium="105" data-type="gel" data-unit="gel" data-ratio="2:1" data-name="Carbs Fuel Gel Original">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Carbs Fuel Gel (Original)</div><div class="pbadges"><span class="badge b-carb">50g</span><span class="badge b-sodium">105mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="carbsfuel-salted" data-carbs="50" data-sodium="450" data-type="gel" data-unit="gel" data-ratio="2:1" data-name="Carbs Fuel Gel Salted">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Carbs Fuel Gel (Salted)</div><div class="pbadges"><span class="badge b-carb">50g</span><span class="badge b-sodium">450mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="gu" data-carbs="22" data-sodium="60" data-type="gel" data-unit="gel" data-name="GU Energy Gel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">GU Energy Gel</div><div class="pbadges"><span class="badge b-carb">22g</span><span class="badge b-sodium">60mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="precision-pf30" data-carbs="30" data-sodium="0" data-type="gel" data-unit="gel" data-ratio="2:1" data-name="Precision Fuel PF30">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Precision Fuel PF30</div><div class="pbadges"><span class="badge b-carb">30g</span><span class="badge b-warn">No sodium</span></div></div>
+      </div>
+      <div class="product-row" data-product="sis" data-carbs="22" data-sodium="10" data-type="gel" data-unit="gel" data-name="SIS GO Isotonic Gel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">SIS GO Isotonic Gel</div><div class="pbadges"><span class="badge b-carb">22g</span><span class="badge b-warn">Very low sodium</span></div></div>
+      </div>
+      <div class="product-row" data-product="hammer" data-carbs="22" data-sodium="25" data-type="gel" data-unit="gel" data-name="Hammer Gel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hammer Gel</div><div class="pbadges"><span class="badge b-carb">22g</span><span class="badge b-warn">Very low sodium</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- BARS -->
+  <div class="accordion" data-category="bar">
+    <div class="accordion-hdr"><div class="acc-title">Bars</div><div class="acc-meta"><span class="acc-count" id="count-bar"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="clifbar" data-carbs="45" data-sodium="115" data-type="bar" data-unit="bar" data-name="Clif Bar">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Clif Bar</div><div class="pbadges"><span class="badge b-carb">45g</span><span class="badge b-sodium">115mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="probar" data-carbs="45" data-sodium="170" data-type="bar" data-unit="bar" data-name="ProBar Meal Bar">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">ProBar Meal Bar</div><div class="pbadges"><span class="badge b-carb">45g</span><span class="badge b-sodium">170mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="rxbar" data-carbs="23" data-sodium="200" data-type="bar" data-unit="bar" data-name="RXBar">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">RXBar</div><div class="pbadges"><span class="badge b-carb">23g</span><span class="badge b-sodium">200mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="larabar" data-carbs="26" data-sodium="25" data-type="bar" data-unit="bar" data-name="Larabar">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Larabar</div><div class="pbadges"><span class="badge b-carb">26g</span><span class="badge b-warn">Very low sodium</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- REAL FOOD -->
+  <div class="accordion" data-category="food">
+    <div class="accordion-hdr"><div class="acc-title">Real Food</div><div class="acc-meta"><span class="acc-count" id="count-food"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="fignewton" data-carbs="11" data-sodium="50" data-type="food" data-unit="cookie" data-name="Fig Newton"><div class="pcheck"></div><div class="pinfo"><div class="pname">Fig Newton</div><div class="pbadges"><span class="badge b-carb">11g/cookie</span><span class="badge b-sodium">50mg Na</span></div></div></div>
+      <div class="product-row" data-product="banana" data-carbs="27" data-sodium="1" data-type="food" data-unit="banana" data-name="Banana"><div class="pcheck"></div><div class="pinfo"><div class="pname">Banana</div><div class="pbadges"><span class="badge b-carb">27g</span><span class="badge b-warn">Very low sodium</span></div></div></div>
+      <div class="product-row" data-product="ricecake" data-carbs="30" data-sodium="100" data-type="food" data-unit="cake" data-name="Rice Cake"><div class="pcheck"></div><div class="pinfo"><div class="pname">Rice Cake</div><div class="pbadges"><span class="badge b-carb">~30g</span><span class="badge b-sodium">~100mg Na</span></div></div></div>
+      <div class="product-row" data-product="potato" data-carbs="15" data-sodium="5" data-type="food" data-unit="potato" data-name="Boiled Potato"><div class="pcheck"></div><div class="pinfo"><div class="pname">Boiled Potato (small)</div><div class="pbadges"><span class="badge b-carb">~15g</span><span class="badge b-warn">Add salt!</span></div></div></div>
+      <div class="product-row" data-product="gummybears" data-carbs="22" data-sodium="10" data-type="food" data-unit="handful" data-name="Gummy Bears"><div class="pcheck"></div><div class="pinfo"><div class="pname">Gummy Bears (~10)</div><div class="pbadges"><span class="badge b-carb">~22g</span><span class="badge b-sodium">~10mg Na</span></div></div></div>
+      <div class="product-row" data-product="onigiri" data-carbs="35" data-sodium="200" data-type="food" data-unit="onigiri" data-name="Onigiri Rice Ball"><div class="pcheck"></div><div class="pinfo"><div class="pname">Onigiri / Rice Ball</div><div class="pbadges"><span class="badge b-carb">~35g</span><span class="badge b-sodium">~200mg Na</span></div></div></div>
+      <div class="product-row" data-product="dates" data-carbs="18" data-sodium="0" data-type="food" data-unit="date" data-name="Medjool Date"><div class="pcheck"></div><div class="pinfo"><div class="pname">Medjool Date</div><div class="pbadges"><span class="badge b-carb">~18g</span><span class="badge b-warn">Add salt</span></div></div></div>
+      <div class="product-row" data-product="stroopwafel" data-carbs="30" data-sodium="75" data-type="food" data-unit="wafel" data-name="Stroopwafel"><div class="pcheck"></div><div class="pinfo"><div class="pname">Stroopwafel</div><div class="pbadges"><span class="badge b-carb">~30g</span><span class="badge b-sodium">~75mg Na</span></div></div></div>
+      <div class="product-row" data-product="maple" data-carbs="45" data-sodium="10" data-type="food" data-unit="flask" data-name="Maple Syrup Flask"><div class="pcheck"></div><div class="pinfo"><div class="pname">Maple Syrup Flask</div><div class="pbadges"><span class="badge b-carb">~45g</span><span class="badge b-warn">Add salt</span></div></div></div>
+      <div class="product-row" data-product="coke" data-carbs="25" data-sodium="35" data-type="food" data-unit="can" data-name="Flat Coke"><div class="pcheck"></div><div class="pinfo"><div class="pname">Flat Coke (200ml)</div><div class="pbadges"><span class="badge b-carb">~25g</span><span class="badge b-sodium">~35mg Na</span></div></div></div>
+      <div class="product-row" data-product="applesauce" data-carbs="15" data-sodium="35" data-type="food" data-unit="pouch" data-name="Applesauce Pouch"><div class="pcheck"></div><div class="pinfo"><div class="pname">Applesauce Pouch</div><div class="pbadges"><span class="badge b-carb">~15g</span><span class="badge b-sodium">~35mg Na</span></div></div></div>
+    </div></div>
+  </div>
+
+  <!-- DIY -->
+  <div class="accordion" data-category="diy">
+    <div class="accordion-hdr"><div class="acc-title">DIY Mix</div><div class="acc-meta"><span class="acc-count" id="count-diy"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="diy-full" data-carbs="90" data-sodium="500" data-type="diy" data-unit="bottle" data-ratio="2:1" data-name="DIY High Carb Bottle 90g">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">DIY High Carb Bottle (90g)</div><div class="pbadges"><span class="badge b-carb">90g</span><span class="badge b-sodium">500mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="diy-light" data-carbs="60" data-sodium="500" data-type="diy" data-unit="bottle" data-ratio="2:1" data-name="DIY Light Bottle 60g">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">DIY Light Bottle (60g)</div><div class="pbadges"><span class="badge b-carb">60g</span><span class="badge b-sodium">500mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- SODIUM -->
+  <div class="accordion" data-category="sodium">
+    <div class="accordion-hdr"><div class="acc-title">Sodium / Electrolytes</div><div class="acc-meta"><span class="acc-count" id="count-sodium"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="ns-s200" data-carbs="0" data-sodium="200" data-type="sodium" data-unit="scoop" data-name="Neversecond S200 Sodium Booster">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Neversecond S200 Sodium Booster</div><div class="pbadges"><span class="badge b-sponsor">Team Sponsor</span><span class="badge b-sodium">200mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="saltcap" data-carbs="0" data-sodium="200" data-type="sodium" data-unit="cap" data-name="Salt Cap Electrolyte Tab">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Salt Cap / Electrolyte Tab</div><div class="pbadges"><span class="badge b-sodium">~200mg Na</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="card" style="margin-top:8px;">
     <button type="button" class="cta" id="goBtn">Build My Plan</button>
     <div class="warning" id="warning">Describe your ride and pick conditions first.</div>
     <div class="fine">Brand-neutral &middot; works with any product that hits the targets<br>Always test fueling in training before race day</div>
@@ -371,79 +407,132 @@
 </div>
 <script>
 (function(){
-  var temp = null;
-  var sweat = 'normal';
-  var gut = 'standard';
+  var temp = null, sweat = 'normal', gut = 'standard';
+  var selectedProducts = {};
 
-  document.querySelectorAll('.choice').forEach(function(btn){
+  // SETUP BUTTONS
+  document.querySelectorAll('.seg-btn, .pair-btn').forEach(function(btn){
     var startY = 0;
-    btn.addEventListener('touchstart', function(e){
-      startY = e.touches[0].clientY;
-    }, { passive: true });
+    btn.addEventListener('touchstart', function(e){ startY = e.touches[0].clientY; }, { passive: true });
     function go(e){
-      e.preventDefault();
-      var moved = Math.abs(e.changedTouches[0].clientY - startY);
-      if (moved > 8) return;
-      var group = btn.getAttribute('data-group');
-      var value = btn.getAttribute('data-value');
+      if (e.type === 'touchend'){ e.preventDefault(); if (Math.abs(e.changedTouches[0].clientY - startY) > 8) return; }
+      var group = btn.dataset.group, value = btn.dataset.value;
       if (group === 'temp') temp = value;
       if (group === 'sweat') sweat = value;
       if (group === 'gut') gut = value;
-      document.querySelectorAll('.choice[data-group="' + group + '"]').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('[data-group="' + group + '"]').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
     }
     btn.addEventListener('touchend', go, { passive: false });
-    btn.addEventListener('click', function(){
-      var group = btn.getAttribute('data-group');
-      var value = btn.getAttribute('data-value');
-      if (group === 'temp') temp = value;
-      if (group === 'sweat') sweat = value;
-      if (group === 'gut') gut = value;
-      document.querySelectorAll('.choice[data-group="' + group + '"]').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
+    btn.addEventListener('click', go);
+  });
+
+  // ACCORDIONS
+  document.querySelectorAll('.accordion-hdr').forEach(function(hdr){
+    hdr.addEventListener('click', function(){ hdr.closest('.accordion').classList.toggle('open'); });
+  });
+
+  // SELECTED KIT SUMMARY
+  function updateSummary(){
+    var list = document.getElementById('selectedList');
+    var keys = Object.keys(selectedProducts);
+    if (!keys.length){
+      list.innerHTML = '<div class="kit-empty">No items selected — pick from the list below</div>';
+      document.getElementById('totalCarbs').textContent = '—';
+      document.getElementById('totalSodium').textContent = '—';
+      return;
+    }
+    var totalC = 0, totalS = 0;
+    var html = '<div class="selected-tags">';
+    keys.forEach(function(k){
+      var p = selectedProducts[k];
+      totalC += p.carbs; totalS += p.sodium;
+      html += '<div class="selected-tag">';
+      html += '<div><div class="tag-name">' + p.name + '</div><div class="tag-info">' + p.carbs + 'g carbs &middot; ' + p.sodium + 'mg Na</div></div>';
+      html += '<button class="tag-remove" data-remove="' + k + '">&#215;</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+    list.innerHTML = html;
+    document.getElementById('totalCarbs').textContent = totalC;
+    document.getElementById('totalSodium').textContent = totalS;
+    list.querySelectorAll('.tag-remove').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var key = btn.dataset.remove;
+        delete selectedProducts[key];
+        var row = document.querySelector('.product-row[data-product="' + key + '"]');
+        if (row){ row.classList.remove('selected'); row.querySelector('.pcheck').textContent = ''; }
+        updateSummary(); updateCounts();
+      });
+    });
+  }
+
+  // PRODUCT SELECTION
+  document.querySelectorAll('.product-row').forEach(function(row){
+    var startY = 0;
+    row.addEventListener('touchstart', function(e){ startY = e.touches[0].clientY; }, { passive: true });
+    function tog(e){
+      if (e.type === 'touchend'){ e.preventDefault(); if (Math.abs(e.changedTouches[0].clientY - startY) > 8) return; }
+      var key = row.dataset.product;
+      if (row.classList.contains('selected')){
+        row.classList.remove('selected'); row.querySelector('.pcheck').textContent = '';
+        delete selectedProducts[key];
+      } else {
+        row.classList.add('selected'); row.querySelector('.pcheck').textContent = '✓';
+        selectedProducts[key] = { name: row.dataset.name, carbs: parseInt(row.dataset.carbs), sodium: parseInt(row.dataset.sodium), type: row.dataset.type, unit: row.dataset.unit || '', ratio: row.dataset.ratio || '' };
+      }
+      updateSummary(); updateCounts();
+    }
+    row.addEventListener('touchend', tog, { passive: false });
+    row.addEventListener('click', tog);
+  });
+
+  // SEARCH
+  document.getElementById('searchInput').addEventListener('input', function(){
+    var q = this.value.toLowerCase().trim();
+    document.querySelectorAll('.product-row').forEach(function(row){
+      var match = !q || row.dataset.name.toLowerCase().includes(q) || row.dataset.type.toLowerCase().includes(q) || row.dataset.carbs.includes(q) || row.dataset.sodium.includes(q);
+      row.classList.toggle('hidden', !match);
+    });
+    if (q) document.querySelectorAll('.accordion').forEach(function(a){ a.classList.add('open'); });
+    updateCounts();
+  });
+
+  // FILTER CHIPS
+  document.querySelectorAll('.chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      var f = chip.dataset.filter;
+      document.querySelectorAll('.product-row').forEach(function(row){
+        row.classList.toggle('hidden', f !== 'all' && row.dataset.type !== f);
+      });
+      if (f !== 'all') document.querySelectorAll('.accordion').forEach(function(a){ a.classList.toggle('open', a.dataset.category === f); });
+      updateCounts();
     });
   });
 
-  document.querySelectorAll('.product-item').forEach(function(item){
-    var startY = 0;
-    item.addEventListener('touchstart', function(e){
-      startY = e.touches[0].clientY;
-    }, { passive: true });
-    function tog(e){
-      e.preventDefault();
-      var moved = Math.abs(e.changedTouches[0].clientY - startY);
-      if (moved > 8) return;
-      item.classList.toggle('selected');
-      item.querySelector('.product-item-check').textContent = item.classList.contains('selected') ? '✓' : '';
-    }
-    item.addEventListener('touchend', tog, { passive: false });
-    item.addEventListener('click', function(){
-      item.classList.toggle('selected');
-      item.querySelector('.product-item-check').textContent = item.classList.contains('selected') ? '✓' : '';
+  function updateCounts(){
+    ['bottle','gel','bar','food','diy','sodium'].forEach(function(cat){
+      var el = document.getElementById('count-' + cat); if (!el) return;
+      var visible = document.querySelectorAll('.accordion[data-category="' + cat + '"] .product-row:not(.hidden)').length;
+      var sel = document.querySelectorAll('.accordion[data-category="' + cat + '"] .product-row.selected').length;
+      el.textContent = sel ? sel + ' selected' : visible + ' items';
     });
-  });
+  }
+  updateCounts();
+
+  // BUILD PLAN
+  document.getElementById('goBtn').addEventListener('click', buildPlan);
+  document.getElementById('goBtn').addEventListener('touchend', function(e){ e.preventDefault(); buildPlan(); }, { passive: false });
 
   function buildPlan(){
     var desc = document.getElementById('rideDesc').value.trim();
     var warn = document.getElementById('warning');
-    if (!desc || !temp){
-      warn.style.display = 'block'; return;
-    }
+    if (!desc || !temp){ warn.style.display = 'block'; return; }
     warn.style.display = 'none';
 
-    var products = [];
-    document.querySelectorAll('.product-item.selected').forEach(function(item){
-      products.push({
-        name:    item.querySelector('.product-item-name').childNodes[0].textContent.trim(),
-        carbs:   parseInt(item.getAttribute('data-carbs')),
-        sodium:  parseInt(item.getAttribute('data-sodium')),
-        type:    item.getAttribute('data-type'),
-        unit:    item.getAttribute('data-unit'),
-        ratio:   item.getAttribute('data-ratio') || '',
-        product: item.getAttribute('data-product')
-      });
-    });
-
+    var products = Object.values(selectedProducts);
     var tempLabel = { cool: 'cool', moderate: 'moderate', hot: 'hot / summer' }[temp];
     var sweatLabel = sweat === 'salty' ? 'salty sweater — cramps and salt crust on kit, needs significantly higher sodium than average' : 'normal sweater — standard sodium targets';
     var gutLabel = gut === 'trained' ? 'gut trained — athlete can absorb up to 120g carbs/hr with 2:1 products, has practiced high-carb fueling' : 'standard gut — cap at 90g/hr';
@@ -464,11 +553,11 @@ Return this exact JSON structure:
 {
   "ride_summary": "1 short sentence describing the ride demand",
   "duration_hours": <number>,
-  "carbs_per_hour": <integer, max 90>,
+  "carbs_per_hour": <integer>,
   "sodium_per_hour": <integer>,
   "fluid_per_hour": "e.g. 500-750 ml/hr",
   "pack_list": [
-    { "item": "what to pack e.g. Bottle 1 — 2 scoops Formula 369 (60g)", "carbs": <carbs this contributes for the whole ride>, "note": "optional short note" }
+    { "item": "what to pack", "carbs": <carbs this contributes for whole ride>, "note": "optional short note" }
   ],
   "total_carbs": <total carbs for whole ride>,
   "total_sodium": <total sodium for whole ride>,
@@ -478,135 +567,95 @@ Return this exact JSON structure:
 }
 
 CRITICAL RULES:
-- DURATION: Add up every block to get the true total. Do not round to a convenient number.
-- Cap carbs_per_hour at 90 for standard gut. If gut capacity is "gut trained", the cap is 120g/hr — push toward 100-120g/hr for race efforts with 2:1 products. This is physiologically valid for trained athletes with practiced gut capacity.
-- BOTTLE MODEL: Riders have exactly 2 bottle cages. Build the pack list around 2 bottles loaded with enough carbs to cover the ride, then fill the remaining carb gap with gels and real food. Never suggest more than 2 bottles. Example for 3hr ride at 80g/hr (240g total): Bottle 1 — 3 scoops Formula 369 (90g), Bottle 2 — 3 scoops Formula 369 (90g), then 1-2 gels for the remaining 60g gap.
-- NO PRODUCTS SELECTED: If no products are listed, do NOT invent generic bottles or drink mix. Build the plan entirely from what the rider described in their ride text — real food, gels, whatever they mentioned. If they said they only have a turkey leg and a candy bar, the plan is built around that. Be honest about the gap between what they have and what they need.
-- NO WATER / NO BOTTLES AT START: If the rider says they have no water, no bottles, or nothing to drink at the start, do not suggest bottles in the pack list. Acknowledge this in field notes — e.g. "No fluid at the start means pre-loading before you leave is critical. Get carbs in before you go." Plan around what they actually have.
-- REAL NUMBERS: Each pack list item should carry a realistic carb load. A bottle with 2-3 scoops of a 30g product = 60-90g. A 50g gel = 50g. Fig newtons = ~11g each. Show the math simply.
-- RATIO NOTE IS IMPORTANT: If the ride has any intensity — intervals, threshold blocks, hard efforts, climbs at pace, anything above easy Z2 — ratio_note MUST be included and must be direct. Say clearly: "This ride has intensity. 2:1 glucose:fructose products (Neversecond, Carbs Fuel, Maurten) let you absorb up to 90g/hr. Formula 369 and Skratch are 1:1 — fine up to about 60g/hr but you will hit a wall trying to push higher." If the ride is pure easy Z2 with no intensity, ratio does not matter much — say so or leave empty.
-- BOTTLE AND HYDRATION LOGISTICS: Riders may carry 2 bottles, a hydration pack, or a mix. They may have refill points — aid stations, cafes, friends on course. If the rider mentions a hydration pack, factor in the larger fluid volume. If they mention refills, factor in that bottles can be reloaded mid-ride. Adjust the pack list to reflect what they actually need to carry from the start, not total ride consumption.
-- SHORT RACE LOGIC (under 45 min, e.g. Mt Tabor, TT): No bottle. Pre-load 1-2 gels 10-15 min before start. 1 gel in pocket max. Gut shuts down at race pace — all fueling before the gun.
-- CIRCUIT RACE LOGIC (45-75 min, longer laps e.g. PIR on a track): Pre-load 2 gels before start (100g primary fuel). 1 light bottle (50-60g mix) mostly for hydration — sip on longer straights. 1 spare gel in pocket, can grab it on a clean lap.
-- SHORT CRITERIUM LOGIC (45-75 min, short punchy course e.g. 3/4 mile crit): Pre-load is almost everything. 2 gels before start. Water bottle only — just enough to wet mouth and lips. No realistic gel windows mid-race on a punchy short course.
-- DIY MIX: Some riders make their own — maltodextrin + table sugar + salt. Completely legitimate and cheap. Key formula: 1:1 malto to table sugar by weight = 2:1 glucose:fructose ratio. 90g bottle = 60g malto + 30g table sugar + 500mg sodium. Must be weighed — tablespoons are inaccurate. Treat it exactly the same as any commercial product.
-- ROAD RACE LOGIC (2-4hr, variable intensity): Feed zones and teammates change the math. Bottles get swapped. Pockets full. Neutral sections and climbs are fueling windows. Real food viable on steadier sections. Gels for attacks and climbs.
-- GRAVEL RACE LOGIC (3-5hr, sustained mixed terrain): Self-supported mostly, pockets loaded. Real food is your friend — potatoes, rice balls, fig newtons, gummy bears all work. Sodium is critical over this duration especially with heat and dust. Pre-load before start, then steady intake every 20-30 min. Do not wait for hunger.
-- LONG RIDE CARRY LOGISTICS (4hr+): Two bottles only covers 2-3hrs of fluid. For longer rides the pack list MUST include what to carry for refills. Be specific based on what the rider selected: if they have powder, tell them to carry extra sachets in a jersey pocket or small zip bag. If they have gels, tell them how many extra to carry. If they mention aid stations or cafes, factor in refilling bottles with water and adding a scoop of mix. Do not just say "plan refill stops" — say exactly what to carry and what to do. Example: "Carry 3-4 extra sachets of Formula 369 in your pocket — at any water stop, empty a sachet into your bottle and refill with water." The total pack list should cover the full duration using a realistic mix of what they leave with and what they can refill or restock along the way.
-- SODIUM TARGETS: These are minimums, not suggestions. Cool conditions: 400-600mg/hr. Moderate conditions: 600-800mg/hr. Hot conditions: 800-1000mg/hr. Salty sweater adds 40-60% on top. For a hard gravel race or road race in moderate conditions, 600-700mg/hr is the floor. Never recommend 300-400mg/hr for a race effort — that is dangerously low. Also make sure sodium_per_hour and total_sodium are mathematically consistent: total_sodium = sodium_per_hour × duration_hours.
-- CARB INTENSITY: For race efforts, or any ride described as a race or hard gravel with sustained climbs, push carbs toward 80-90g/hr if 2:1 products are selected. Do not default to 60-70g/hr for race-intensity efforts — that is training-ride fueling, not race fueling.
-- SALTY SWEATER: If rider is a salty sweater, bump sodium targets by 40-60% above standard. Standard hot day might be 700mg/hr — salty sweater in same conditions needs 1000-1200mg/hr. Cramps are almost always a sodium issue, not a carb issue.
-- PLANNING LOGIC: The plan balances carbs per hour, sodium needs, bottle constraints, what can realistically be carried, and reduced gut risk by fueling early. The output should feel like advice from a knowledgeable teammate, not a spreadsheet.
-- GI DISTRESS: Never blame a specific product for GI issues. GI distress is almost never about the brand — it is about concentration, timing, intensity, and gut training. If relevant, include in field notes: fuel early, keep concentration reasonable, do not pound carbs mid-hard effort.
-- BRAND NEUTRALITY: This tool is brand-neutral. Neversecond is the team sponsor and is featured, but the plan works equally well with any product that hits the carb and sodium targets. Never suggest one brand is nutritionally superior to another.
+- DURATION: Add up every block to get the true total. Do not round.
+- CARB CAP: Standard gut cap is 90g/hr. Gut trained cap is 120g/hr — push toward 100-120g/hr for race efforts with 2:1 products.
+- CARB INTENSITY: For race efforts or hard gravel with sustained climbs, push carbs toward the upper end of the cap. Do not default to 60-70g/hr for race-intensity — that is training-ride fueling.
+- SODIUM TARGETS: These are minimums. Cool: 400-600mg/hr. Moderate: 600-800mg/hr. Hot: 800-1000mg/hr. Never recommend 300-400mg/hr for a race effort. Ensure sodium_per_hour x duration_hours = total_sodium.
+- BOTTLE MODEL: Riders have 2 bottle cages max. Never suggest more than 2 bottles. Fill remaining carb gap with gels and real food.
+- REAL NUMBERS: A bottle with 2-3 scoops of a 30g product = 60-90g. A 50g gel = 50g. Show the math simply.
+- RATIO NOTE: If ride has any intensity above easy Z2, ratio_note MUST be direct and clear.
+- BOTTLE AND HYDRATION LOGISTICS: Factor in hydration packs and refill points. Adjust pack list to reflect what they carry from start.
+- SHORT RACE (under 45 min): No bottle. Pre-load 1-2 gels before start. Gut shuts down at race pace.
+- CIRCUIT RACE (45-75 min, longer laps): Pre-load 2 gels before start. 1 light bottle. 1 spare gel in pocket.
+- SHORT CRIT (45-75 min, punchy course): Pre-load everything. Water bottle only. No mid-race gel windows.
+- DIY MIX: Legitimate and cheap. 1:1 malto:sugar by weight = 2:1 glucose:fructose. Treat same as commercial.
+- ROAD RACE (2-4hr): Feed zones, pockets full, real food on steady sections, gels for attacks.
+- GRAVEL RACE (3-5hr): Self-supported, pockets loaded, real food works, sodium critical, steady intake every 20-30 min.
+- LONG RIDE (4hr+): Pack list MUST include specific carry logistics — what to carry in pockets, what to do at water stops. Say exactly: "Carry 3-4 extra sachets of X in a zip bag — at any water stop, add a scoop and refill."
+- SALTY SWEATER: Bump sodium 40-60% above standard. Cramps are sodium, not carbs.
+- NO PRODUCT INVENTION: Never invent generic products. Only use what the rider selected.
+- PLANNING LOGIC: Output should feel like advice from a knowledgeable teammate, not a spreadsheet.
+- GI DISTRESS: Never blame a product. It is concentration, timing, intensity, and gut training.
+- BRAND NEUTRALITY: Neversecond is team sponsor and featured. Plan works with any product hitting targets.
 - Return ONLY the JSON object. No preamble, no markdown fences.`;
 
     document.getElementById('thinking').style.display = 'block';
-    document.getElementById('result').style.display   = 'none';
+    document.getElementById('result').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'none';
 
     fetch('/api/fuel', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
     })
     .then(function(r){ return r.json(); })
     .then(function(data){
       document.getElementById('thinking').style.display = 'none';
       var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
       var clean = text.replace(/```json|```/g, '').trim();
-      var p;
-      try { p = JSON.parse(clean); } catch(e) {
-        showError('Couldn\'t read the response. Try again or simplify your ride description.');
-        return;
-      }
+      var p; try { p = JSON.parse(clean); } catch(e){ showError('Could not read the response. Try again or simplify your ride description.'); return; }
       renderResult(p);
     })
-    .catch(function(){
-      document.getElementById('thinking').style.display = 'none';
-      showError('Connection error. Check your internet and try again.');
-    });
+    .catch(function(){ document.getElementById('thinking').style.display = 'none'; showError('Connection error. Check your internet and try again.'); });
   }
 
   function showError(msg){
     var r = document.getElementById('result');
-    r.innerHTML = '<div class="result-eyebrow">Error</div><div style="font-size:14px;margin-top:6px;">' + msg + '</div>';
-    r.style.display = 'block';
-    document.getElementById('resetBtn').style.display = 'block';
+    r.innerHTML = '<div class="re">Error</div><div style="font-size:13px;margin-top:6px;">' + msg + '</div>';
+    r.style.display = 'block'; document.getElementById('resetBtn').style.display = 'block';
   }
 
   function renderResult(p){
-    var r = document.getElementById('result');
-    var hours = p.duration_hours || 1;
-    var html = '';
-    html += '<div class="result-eyebrow">Plan locked</div>';
-    html += '<div class="result-workout-summary">' + (p.ride_summary || '') + '</div>';
-    html += '<div class="result-carbs">' + p.carbs_per_hour + 'g carbs/hr</div>';
-    html += '<div class="result-sodium">' + p.sodium_per_hour + 'mg sodium/hr</div>';
-    html += '<div class="result-fluid">' + (p.fluid_per_hour || '') + '</div>';
-    html += '<div style="font-size:12px;opacity:.45;margin-top:8px;font-style:italic;">Target: ' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium &middot; ' + hours + 'hr ride</div>';
-    html += '<div class="divider"></div>';
-    html += '<div class="section-label">Leave with this</div>';
-    html += '<div class="pack-list">';
+    var r = document.getElementById('result'), hours = p.duration_hours || 1, html = '';
+    html += '<div class="re">Plan locked</div>';
+    html += '<div class="rs">' + (p.ride_summary || '') + '</div>';
+    html += '<div class="rbig">' + p.carbs_per_hour + 'g carbs/hr</div>';
+    html += '<div class="rmed">' + p.sodium_per_hour + 'mg sodium/hr</div>';
+    html += '<div class="rsm">' + (p.fluid_per_hour || '') + '</div>';
+    html += '<div class="rtarget">Target: ' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium &middot; ' + hours + 'hr ride</div>';
+    html += '<div class="rdiv"></div><div class="rsec">Leave with this</div><div class="pack-list">';
     (p.pack_list || []).forEach(function(item){
       html += '<div class="pack-item"><div>&#10003; ' + item.item;
-      if (item.note) html += '<div class="pack-item-sub">' + item.note + '</div>';
+      if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
       html += '</div>';
-      if (item.carbs > 0) html += '<div class="pack-item-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
+      if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
       html += '</div>';
     });
     html += '</div>';
-    if (p.total_carbs) {
-      html += '<div class="pack-note">' + p.total_carbs + 'g carbs total &middot; ' + (p.total_sodium || '—') + 'mg sodium total for ' + hours + 'h</div>';
-    }
-    html += '<div class="divider"></div>';
-    if (p.field_notes && p.field_notes.length) {
-      html += '<div class="section-label">Field notes</div>';
-      html += '<ul class="field-notes">';
-      p.field_notes.forEach(function(n){ html += '<li>' + n + '</li>'; });
-      html += '</ul>';
-    }
-    if (p.ratio_note) {
-      html += '<div class="divider"></div>';
-      html += '<div class="section-label">Carb ratio matters here</div>';
-      html += '<div style="font-size:14px;line-height:1.6;font-weight:600;color:rgba(0,0,0,0.8);">' + p.ratio_note + '</div>';
-    }
+    if (p.total_carbs) html += '<div class="pack-note">' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium total for ' + hours + 'h</div>';
+    html += '<div class="rdiv"></div>';
+    if (p.field_notes && p.field_notes.length){ html += '<div class="rsec">Field notes</div><ul class="fnotes">'; p.field_notes.forEach(function(n){ html += '<li>' + n + '</li>'; }); html += '</ul>'; }
+    if (p.ratio_note){ html += '<div class="rdiv"></div><div class="rsec">Carb ratio matters here</div><div style="font-size:13px;line-height:1.6;font-weight:600;color:rgba(0,0,0,0.8);">' + p.ratio_note + '</div>'; }
     html += '<div class="tagline">' + (p.bottom_line || 'feel steady, not desperate') + '</div>';
-    r.innerHTML = html;
-    r.style.display = 'block';
-    document.getElementById('resetBtn').style.display = 'block';
+    r.innerHTML = html; r.style.display = 'block'; document.getElementById('resetBtn').style.display = 'block';
     setTimeout(function(){ r.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
   }
 
-  var goBtn = document.getElementById('goBtn');
-  goBtn.addEventListener('touchend', function(e){ e.preventDefault(); buildPlan(); }, { passive: false });
-  goBtn.addEventListener('click', buildPlan);
-
-  function doReset(e){
-    e.preventDefault();
-    temp = null;
-    sweat = 'normal';
-    gut = 'standard';
-    document.querySelectorAll('.choice').forEach(function(b){ b.classList.remove('active'); });
-    document.querySelectorAll('.product-item').forEach(function(b){
-      b.classList.remove('selected');
-      b.querySelector('.product-item-check').textContent = '';
-    });
+  // RESET
+  document.getElementById('resetBtn').addEventListener('click', doReset);
+  document.getElementById('resetBtn').addEventListener('touchend', function(e){ e.preventDefault(); doReset(); }, { passive: false });
+  function doReset(){
+    temp = null; sweat = 'normal'; gut = 'standard'; selectedProducts = {};
+    document.querySelectorAll('.seg-btn, .pair-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.product-row').forEach(function(r){ r.classList.remove('selected'); r.querySelector('.pcheck').textContent = ''; });
     document.getElementById('rideDesc').value = '';
-    document.getElementById('result').style.display   = 'none';
+    document.getElementById('result').style.display = 'none';
     document.getElementById('resetBtn').style.display = 'none';
     document.getElementById('thinking').style.display = 'none';
-    document.getElementById('warning').style.display  = 'none';
+    document.getElementById('warning').style.display = 'none';
+    updateSummary(); updateCounts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  var resetBtn = document.getElementById('resetBtn');
-  resetBtn.addEventListener('touchend', doReset, { passive: false });
-  resetBtn.addEventListener('click', doReset);
-
 })();
 </script>
 </body>

@@ -26,12 +26,11 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
 
 /* HEADER */
 .header { text-align: center; margin-bottom: 36px; }
-.logo-mark { display: flex; justify-content: center; margin-bottom: 10px; }
+.logo-mark { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 6px; }
 .logo-stacked { display: inline-block; text-align: left; position: relative; padding-left: 18px; }
 .logo-stacked-bar { position: absolute; left: 0; top: 2px; bottom: 2px; width: 4px; background: var(--orange); border-radius: 2px; }
-.logo-stacked-top { font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #9A9693; margin-bottom: 4px; }
-.logo-stacked-main { font-size: 38px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #1C1C1C; line-height: 1; }
-.header-tagline { font-size: 10px; letter-spacing: 3.5px; color: #9A9693; text-transform: uppercase; margin-top: 4px; text-align: center; }
+.logo-stacked-main { font-size: 42px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #1C1C1C; line-height: 1; }
+.logo-stacked-sub { font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #9A9693; margin-top: 5px; }
 .promise { font-size: 13px; color: #9A9693; margin-top: 10px; line-height: 1.7; text-align: center; }
 
 /* CARDS */
@@ -213,7 +212,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
 
   <div class="header">
     <div class="logo-mark">
-      <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" width="64" height="64">
+      <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" width="67" height="67">
         <defs>
           <style>
             .st0 { fill: #ef4223; }
@@ -235,8 +234,8 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       </svg>
       <div class="logo-stacked">
         <div class="logo-stacked-bar"></div>
-        <div class="logo-stacked-top">Team Oregon</div>
         <div class="logo-stacked-main">Fuel<br>Control</div>
+        <div class="logo-stacked-sub">Team Oregon Racing</div>
       </div>
     </div>
     <div class="promise">Build a practical fueling plan from whatever's in your kit.<br>Brands, real food, DIY &mdash; hit your targets without guessing.</div>
@@ -328,6 +327,21 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       <div class="product-row" data-product="tailwind-hc" data-carbs="90" data-sodium="660" data-type="bottle" data-unit="bottle" data-ratio="2:1" data-name="Tailwind High Carb Fuel">
         <div class="pcheck"></div><div class="pinfo"><div class="pname">Tailwind High Carb Fuel</div><div class="pbadges"><span class="badge b-carb">90g/bottle</span><span class="badge b-sodium">660mg Na</span><span class="badge b-ratio">2:1</span></div></div>
       </div>
+      <div class="product-row" data-product="maurten-160" data-carbs="40" data-sodium="160" data-type="bottle" data-unit="sachet" data-ratio="0.8:1" data-name="Maurten Drink Mix 160">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Maurten Drink Mix 160</div><div class="pbadges"><span class="badge b-carb">40g/sachet</span><span class="badge b-sodium">160mg Na</span><span class="badge b-warn">Low sodium</span><span class="badge b-ratio">0.8:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="maurten-320" data-carbs="80" data-sodium="320" data-type="bottle" data-unit="sachet" data-ratio="0.8:1" data-name="Maurten Drink Mix 320">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Maurten Drink Mix 320</div><div class="pbadges"><span class="badge b-carb">80g/sachet</span><span class="badge b-sodium">320mg Na</span><span class="badge b-ratio">0.8:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="sis-beta-drink" data-carbs="80" data-sodium="300" data-type="bottle" data-unit="bottle" data-ratio="0.8:1" data-name="SiS Beta Fuel Drink">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">SiS Beta Fuel Drink</div><div class="pbadges"><span class="badge b-carb">80g/bottle</span><span class="badge b-sodium">300mg Na</span><span class="badge b-ratio">0.8:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="high5-drink" data-carbs="44" data-sodium="240" data-type="bottle" data-unit="serving" data-ratio="2:1" data-name="High5 Energy Drink">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">High5 Energy Drink</div><div class="pbadges"><span class="badge b-carb">44g/serving</span><span class="badge b-sodium">240mg Na</span><span class="badge b-ratio">2:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="4endurance-cd" data-carbs="23" data-sodium="100" data-type="bottle" data-unit="scoop" data-name="4endurance Cyclic Dextrin 4Energy">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">4endurance Cyclic Dextrin 4Energy</div><div class="pbadges"><span class="badge b-carb">23g/scoop</span><span class="badge b-sodium">~100mg Na</span><span class="badge b-ratio">Slow release</span></div></div>
+      </div>
     </div></div>
   </div>
 
@@ -355,6 +369,18 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       </div>
       <div class="product-row" data-product="hammer" data-carbs="22" data-sodium="25" data-type="gel" data-unit="gel" data-name="Hammer Gel">
         <div class="pcheck"></div><div class="pinfo"><div class="pname">Hammer Gel</div><div class="pbadges"><span class="badge b-carb">22g</span><span class="badge b-warn">Very low sodium</span></div></div>
+      </div>
+      <div class="product-row" data-product="maurten-gel100" data-carbs="25" data-sodium="20" data-type="gel" data-unit="gel" data-ratio="0.8:1" data-name="Maurten Gel 100">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Maurten Gel 100</div><div class="pbadges"><span class="badge b-carb">25g</span><span class="badge b-warn">Very low sodium</span><span class="badge b-ratio">0.8:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="maurten-gel160" data-carbs="40" data-sodium="20" data-type="gel" data-unit="gel" data-ratio="0.8:1" data-name="Maurten Gel 160">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Maurten Gel 160</div><div class="pbadges"><span class="badge b-carb">40g</span><span class="badge b-warn">Very low sodium</span><span class="badge b-ratio">0.8:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="sis-betafuel-gel" data-carbs="40" data-sodium="55" data-type="gel" data-unit="gel" data-ratio="0.8:1" data-name="SiS Beta Fuel Gel">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">SiS Beta Fuel Gel</div><div class="pbadges"><span class="badge b-carb">40g</span><span class="badge b-sodium">55mg Na</span><span class="badge b-ratio">0.8:1</span></div></div>
+      </div>
+      <div class="product-row" data-product="high5-gel-elec" data-carbs="23" data-sodium="85" data-type="gel" data-unit="gel" data-name="High5 Energy Gel Electrolyte">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">High5 Energy Gel Electrolyte</div><div class="pbadges"><span class="badge b-carb">23g</span><span class="badge b-sodium">85mg Na</span></div></div>
       </div>
     </div></div>
   </div>

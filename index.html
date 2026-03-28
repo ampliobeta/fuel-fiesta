@@ -205,6 +205,14 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
   font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
   cursor: pointer; margin-top: 8px; -webkit-appearance: none; touch-action: manipulation;
 }
+
+/* STEM CARD */
+.stem-card { background: #1C1C1C; border-radius: 14px; padding: 16px 18px; margin-top: 10px; }
+.stem-card-title { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #666; margin-bottom: 12px; }
+.stem-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.stem-row:last-child { margin-bottom: 0; }
+.stem-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); flex-shrink: 0; width: 56px; }
+.stem-value { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -622,13 +630,21 @@ Return this exact JSON structure:
   "total_sodium": <total sodium for whole ride>,
   "field_notes": ["short tip 1", "short tip 2", "short tip 3"],
   "ratio_note": "direct plain-language explanation of why ratio matters for this ride, or empty string if effort is low",
-  "bottom_line": "1 sentence. The consequence of under-fueling this specific ride."
+  "bottom_line": "1 sentence. The consequence of under-fueling this specific ride.",
+  "stem_card": {
+    "pre": "what to take before rolling",
+    "during": "1 line — background fueling rhythm",
+    "efforts": "what to do at key intensity moments",
+    "target": "X-Yg/hr — one phrase on the fueling philosophy"
+  }
 }
 
 CRITICAL RULES:
 - DURATION: Add up every block to get the true total. Do not round.
-- CARB CAP: Standard gut cap is 90g/hr. Gut trained cap is 120g/hr — push toward 100-120g/hr for race efforts with 2:1 products.
-- CARB INTENSITY: For race efforts or hard gravel with sustained climbs, push carbs toward the upper end of the cap. Do not default to 60-70g/hr for race-intensity — that is training-ride fueling.
+- CARB TARGETS: For any ride with sustained intensity above Z2, target the UPPER end of the cap, not the middle. Standard riders: push toward 85-90g/hr. Gut trained: push toward 110-120g/hr for race/interval efforts. Never default to 60-80g/hr for hard training — that is conservative and leaves performance on the table.
+- FUELING PHILOSOPHY: The goal is to PROTECT POWER OUTPUT at key moments, not just match intake to duration. Background fueling must be high enough that gels become top-ups, not rescues. If a rider arrives at a hard effort already slightly low, the effort is compromised. Build the plan around preventing that.
+- CARB INTENSITY: For race efforts, intervals, or hard gravel with sustained climbs, push carbs to the upper cap. Riders who fuel aggressively tend to feel better — lean toward that.
+- SOLID FOOD TIMING: Bars, fig newtons, and real food are for the first hour or easy Z2 sections only. For high-intensity rides, recommend liquid + gels as primary. Flag solids as "early ride only" or "Z2 sections only" if the ride has hard efforts.
 - SODIUM TARGETS: These are minimums. Cool: 400-600mg/hr. Moderate: 600-800mg/hr. Hot: 800-1000mg/hr. Never recommend 300-400mg/hr for a race effort. Ensure sodium_per_hour x duration_hours = total_sodium.
 - BOTTLE MODEL: Riders have 2 bottle cages max. Never suggest more than 2 bottles. Fill remaining carb gap with gels and real food.
 - REAL NUMBERS: A bottle with 2-3 scoops of a 30g product = 60-90g. A 50g gel = 50g. Show the math simply.
@@ -643,6 +659,7 @@ CRITICAL RULES:
 - LONG RIDE (4hr+): Pack list MUST include specific carry logistics — what to carry in pockets, what to do at water stops. Say exactly: "Carry 3-4 extra sachets of X in a zip bag — at any water stop, add a scoop and refill."
 - SALTY SWEATER: Bump sodium 40-60% above standard. Cramps are sodium, not carbs.
 - NO PRODUCT INVENTION: Never invent generic products. Only use what the rider selected.
+- STEM CARD: Keep stem card lines to 8 words max. It needs to be readable at a glance mid-ride. No full sentences. Action words only.
 - PLANNING LOGIC: Output should feel like advice from a knowledgeable teammate, not a spreadsheet.
 - GI DISTRESS: Never blame a product. It is concentration, timing, intensity, and gut training.
 - BRAND NEUTRALITY: Neversecond is team sponsor and featured. Plan works with any product hitting targets.
@@ -697,6 +714,20 @@ CRITICAL RULES:
     if (p.ratio_note){ html += '<div class="rdiv"></div><div class="rsec">Carb ratio matters here</div><div style="font-size:13px;line-height:1.6;font-weight:600;color:rgba(0,0,0,0.8);">' + p.ratio_note + '</div>'; }
     html += '<div class="tagline">' + (p.bottom_line || 'feel steady, not desperate') + '</div>';
     r.innerHTML = html; r.style.display = 'block'; document.getElementById('resetBtn').style.display = 'block';
+
+    // STEM CARD
+    if (p.stem_card) {
+      var sc = p.stem_card;
+      var scHtml = '<div class="stem-card">';
+      scHtml += '<div class="stem-card-title">Stem Card &mdash; screenshot this</div>';
+      if (sc.pre) scHtml += '<div class="stem-row"><div class="stem-label">PRE</div><div class="stem-value">' + sc.pre + '</div></div>';
+      if (sc.during) scHtml += '<div class="stem-row"><div class="stem-label">DURING</div><div class="stem-value">' + sc.during + '</div></div>';
+      if (sc.efforts) scHtml += '<div class="stem-row"><div class="stem-label">EFFORTS</div><div class="stem-value">' + sc.efforts + '</div></div>';
+      if (sc.target) scHtml += '<div class="stem-row"><div class="stem-label">TARGET</div><div class="stem-value">' + sc.target + '</div></div>';
+      scHtml += '</div>';
+      r.insertAdjacentHTML('afterend', scHtml);
+    }
+
     setTimeout(function(){ r.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
   }
 
@@ -712,6 +743,7 @@ CRITICAL RULES:
     document.getElementById('resetBtn').style.display = 'none';
     document.getElementById('thinking').style.display = 'none';
     document.getElementById('warning').style.display = 'none';
+    var old = document.querySelector('.stem-card'); if (old) old.remove();
     updateSummary(); updateCounts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

@@ -4,6 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Fuel Control</title>
+<meta name="description" content="Build a practical fueling plan for your ride. Team Oregon Racing."/>
+<meta name="theme-color" content="#F47C4A"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Fuel Control"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23F47C4A'/><circle cx='16' cy='16' r='11' fill='white' opacity='0.25'/><circle cx='16' cy='16' r='7' fill='white' opacity='0.35'/><circle cx='16' cy='16' r='3.5' fill='white'/></svg>">
 <style>
 :root {
@@ -748,6 +755,11 @@ CRITICAL RULES:
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
 </script>
 </body>
 </html>

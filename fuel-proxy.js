@@ -57,6 +57,14 @@ const DELIVERY_SCHEMA = {
     absorption_speed: 'fast',
     context: 'any',
     notes: 'Sodium only. No carbs. Add to bottle or take with fluid.'
+  },
+  pack: {
+    delivery_mode: 'continuous',
+    ease_of_use: 'high',
+    requires_hand: false,
+    absorption_speed: 'fast',
+    context: 'any',
+    notes: 'Hands-free continuous sipping. Works on all terrain including climbs and technical sections. Frees bottles for concentrated carb mix. Significantly improves resilience.'
   }
 };
 
@@ -181,6 +189,8 @@ RULES:
 - FUELING PHILOSOPHY: Protect power output at key moments. Background fueling high enough that gels are top-ups not rescues. Prevent deficit, don't recover from it.
 - SOLID FOOD: First hour or Z2 only. Always flag in note field. Liquid + gels primary for any intensity.
 - SODIUM: Cool 400-600mg/hr. Moderate 600-800mg/hr. Hot 800-1000mg/hr. Never under 400mg/hr.
+- HYDRATION PACK: If ANY pack is in the selected products, it MUST be the first item in pack_list regardless of carb content. Format: "Hydration Pack XL — water only" or "Hydration Pack XL — light mix". Note: "continuous hands-free hydration — frees bottles for concentrated carb mix". Always mention pack in field_notes. A pack fundamentally changes bottle strategy — bottles become carb delivery only, pack handles hydration.
+- DURATION: Always use the explicitly stated duration if given. Do not infer from distance.
 - BOTTLES: Max 2. Fill carb gap with gels and food. Unless hydration pack mentioned.
 - DISCRETE DEPENDENCY: Over 60% from gels/solids = execution-sensitive. Flag in resilience.
 - ROLLING TERRAIN + NO FLAT: Front-load and bias toward continuous sources.

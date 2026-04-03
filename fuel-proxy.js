@@ -6,69 +6,31 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-// ── DELIVERY SCHEMA ──────────────────────────────────────────────────────────
-// Structured metadata per product type. Lives server-side only.
+// ── DELIVERY SCHEMA ───────────────────────────────────────────────────────────
 
 const DELIVERY_SCHEMA = {
-  bottle: {
-    delivery_mode: 'semi_continuous',
-    ease_of_use: 'high',
-    requires_hand: false,
-    absorption_speed: 'fast',
-    context: 'any',
-    notes: 'Passive sipping. Best background carb channel. Works on all terrain.'
-  },
-  gel: {
-    delivery_mode: 'discrete',
-    ease_of_use: 'medium',
-    requires_hand: true,
-    absorption_speed: 'fast',
-    context: 'any',
-    notes: 'Requires a clean window. Hard on technical terrain or steep climbs. Ideal around intensity.'
-  },
-  bar: {
-    delivery_mode: 'discrete',
-    ease_of_use: 'low',
-    requires_hand: true,
-    absorption_speed: 'medium',
-    context: 'steady',
-    notes: 'First hour or flat steady terrain only. Avoid on climbs or at race pace.'
-  },
-  food: {
-    delivery_mode: 'discrete',
-    ease_of_use: 'low',
-    requires_hand: true,
-    absorption_speed: 'slow',
-    context: 'steady',
-    notes: 'First hour or Z2 sections only. Not suitable for race-pace efforts.'
-  },
-  diy: {
-    delivery_mode: 'semi_continuous',
-    ease_of_use: 'high',
-    requires_hand: false,
-    absorption_speed: 'fast',
-    context: 'any',
-    notes: 'Same as bottle. Continuous background fueling.'
-  },
-  sodium: {
-    delivery_mode: 'discrete',
-    ease_of_use: 'high',
-    requires_hand: false,
-    absorption_speed: 'fast',
-    context: 'any',
-    notes: 'Sodium only. No carbs. Add to bottle or take with fluid.'
-  },
-  pack: {
-    delivery_mode: 'continuous',
-    ease_of_use: 'high',
-    requires_hand: false,
-    absorption_speed: 'fast',
-    context: 'any',
-    notes: 'Hands-free continuous sipping. Works on all terrain including climbs and technical sections. Frees bottles for concentrated carb mix. Significantly improves resilience.'
-  }
+  bottle: { delivery_mode: 'semi_continuous', ease_of_use: 'high', requires_hand: false, absorption_speed: 'fast', context: 'any', notes: 'Passive sipping. Best background carb channel. Works on all terrain.' },
+  gel:    { delivery_mode: 'discrete', ease_of_use: 'medium', requires_hand: true, absorption_speed: 'fast', context: 'any', notes: 'Requires a clean window. Hard on technical terrain or steep climbs. Ideal around intensity.' },
+  bar:    { delivery_mode: 'discrete', ease_of_use: 'low', requires_hand: true, absorption_speed: 'medium', context: 'steady', notes: 'First hour or flat steady terrain only. Avoid on climbs or at race pace.' },
+  food:   { delivery_mode: 'discrete', ease_of_use: 'low', requires_hand: true, absorption_speed: 'slow', context: 'steady', notes: 'First hour or Z2 sections only. Not suitable for race-pace efforts.' },
+  diy:    { delivery_mode: 'semi_continuous', ease_of_use: 'high', requires_hand: false, absorption_speed: 'fast', context: 'any', notes: 'Same as bottle. Continuous background fueling.' },
+  sodium: { delivery_mode: 'discrete', ease_of_use: 'high', requires_hand: false, absorption_speed: 'fast', context: 'any', notes: 'Sodium only. No carbs. Add to bottle or take with fluid.' },
+  pack:   { delivery_mode: 'continuous', ease_of_use: 'high', requires_hand: false, absorption_speed: 'fast', context: 'any', notes: 'Hands-free continuous sipping. Works on all terrain. Frees bottles for concentrated carb mix. Significantly improves resilience.' }
 };
 
-// ── RESILIENCE ENGINE ────────────────────────────────────────────────────────
+// ── DELIVERY MODE CLASSIFIER ──────────────────────────────────────────────────
+// Section 11-12 of engineering handoff
+
+function classifyDeliveryMode(products) {
+  const hasPack = products.some(p => p.type === 'pack');
+  const bottleCount = products.filter(p => p.type === 'bottle' || p.type === 'diy').length;
+  if (!hasPack) return 'bottle_based';
+  if (bottleCount === 0) return 'pack_based';
+  return 'hybrid';
+}
+
+// ── RESILIENCE SCORING ────────────────────────────────────────────────────────
+// Sections 13-15 of engineering handoff
 
 function computeResilience(products, rideDesc) {
   if (!products || products.length === 0) return null;
@@ -89,60 +51,63 @@ function computeResilience(products, rideDesc) {
     }
   });
 
-  const discretePct = discreteCarbs / totalCarbs;
-  const hasMultipleChannels = channels.size > 1;
+  const pctContinuous = totalCarbs > 0 ? continuousCarbs / totalCarbs : 0;
+  const pctDiscrete = totalCarbs > 0 ? discreteCarbs / totalCarbs : 0;
+  const channelCount = channels.size;
 
   const desc = rideDesc.toLowerCase();
-  const isTechnical = /technical|singletrack|mtb/.test(desc);
-  const isRolling = /rolling|undulating|repeated climb|short climb|constant/.test(desc);
-  const hasNoFlat = /no flat|no sustained flat|never flat|no recovery/.test(desc);
+  const fuelingAccess = /technical|singletrack|no flat|no sustained flat|never flat|repeated climb|rolling/.test(desc) ? 'limited' : 'moderate';
   const hasAidStation = /aid station|feed zone|refill|café stop|support/.test(desc);
-  const earlyEasy = /rolls out|pavement|flat early|gentle early|first.*flat|0.10 miles/.test(desc);
+  const earlyEasy = /rolls out|pavement|flat early|gentle early|0.10 miles/.test(desc);
 
-  let terrainPenalty = 0;
-  if (isTechnical) terrainPenalty += 2;
-  if (isRolling && hasNoFlat) terrainPenalty += 1;
+  // Score per section 14
+  let score = 100;
+  if (pctContinuous < 0.4) score -= 18;
+  else if (pctContinuous < 0.6) score -= 8;
+  if (pctDiscrete > 0.55) score -= 16;
+  else if (pctDiscrete > 0.40) score -= 8;
+  if (fuelingAccess === 'limited' && pctDiscrete > 0.45) score -= 14;
+  if (channelCount === 1) score -= 10;
+  else if (channelCount === 2) score -= 4;
+  const gramsLostIn15 = pctDiscrete * 1.9 * 15;
+  if (gramsLostIn15 >= 20) score -= 12;
+  else if (gramsLostIn15 >= 12) score -= 6;
+  score = Math.max(0, Math.min(100, score));
 
-  let classification = 'Buffered';
-  if (discretePct > 0.65 || (terrainPenalty >= 2 && discretePct > 0.4) || (!hasMultipleChannels && discretePct > 0.5)) {
-    classification = 'Tight';
-  } else if (discretePct > 0.35 || terrainPenalty >= 1) {
-    classification = 'Moderate';
-  }
-
-  const frontLoad = classification === 'Tight' || earlyEasy;
-  const missTolerance = discretePct > 0.6 ? 'low' : discretePct > 0.35 ? 'medium' : 'high';
+  // Buckets per section 15
+  const classification = score >= 80 ? 'Buffered' : score >= 60 ? 'Moderate' : 'Tight';
 
   return {
+    score,
     classification,
-    continuous_pct: Math.round((1 - discretePct) * 100),
-    discrete_pct: Math.round(discretePct * 100),
-    terrain_penalty: terrainPenalty,
-    miss_tolerance: missTolerance,
-    multiple_channels: hasMultipleChannels,
-    front_load: frontLoad,
-    has_aid_station: hasAidStation
+    continuous_pct: Math.round(pctContinuous * 100),
+    discrete_pct: Math.round(pctDiscrete * 100),
+    channel_count: channelCount,
+    fueling_access: fuelingAccess,
+    front_load: classification === 'Tight' || earlyEasy,
+    has_aid_station: hasAidStation,
+    delivery_mode: classifyDeliveryMode(products)
   };
 }
 
-// ── PROMPT BUILDER ───────────────────────────────────────────────────────────
-// Never exposed to browser.
+// ── PROMPT BUILDER ────────────────────────────────────────────────────────────
 
 function buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience }) {
+  const dm = resilience ? resilience.delivery_mode : 'bottle_based';
   const resCtx = resilience ? `
-Pre-computed resilience data (use in reasoning):
-- Classification: ${resilience.classification}
-- Continuous sources: ${resilience.continuous_pct}% of carbs
-- Discrete sources (gels/solids): ${resilience.discrete_pct}% of carbs
-- Terrain penalty: ${resilience.terrain_penalty}/3
-- Miss tolerance: ${resilience.miss_tolerance}
-- Multiple channels: ${resilience.multiple_channels}
+Pre-computed system analysis (do not override):
+- Delivery mode: ${dm}
+- Resilience score: ${resilience.score}/100 → ${resilience.classification}
+- Continuous carb sources: ${resilience.continuous_pct}%
+- Discrete carb sources: ${resilience.discrete_pct}%
+- Fueling access: ${resilience.fueling_access}
+- Delivery channels: ${resilience.channel_count}
 - Front-load: ${resilience.front_load}
-- Aid station access: ${resilience.has_aid_station}` : '';
+- Aid station: ${resilience.has_aid_station}` : '';
 
   const delCtx = deliveryContext ? `\nDelivery context:\n${deliveryContext}` : '';
 
-  return `You are a no-nonsense cycling nutritionist. Return ONLY a JSON object — no markdown, no explanation.
+  return `You are a no-nonsense cycling nutritionist building a rideable fueling system. Return ONLY a JSON object — no markdown, no explanation.
 
 Ride: ${desc}
 Conditions: ${tempLabel}
@@ -153,28 +118,47 @@ ${productList}
 ${delCtx}
 ${resCtx}
 
-Return this exact JSON:
+Return this exact JSON — every field required:
 {
   "ride_summary": "1 sentence describing ride demand",
   "duration_hours": <number>,
   "carbs_per_hour": <integer>,
   "sodium_per_hour": <integer>,
-  "fluid_per_hour": "e.g. 500-750 ml/hr",
-  "pack_list": [
-    { "item": "what to pack", "carbs": <total carbs this item contributes>, "note": "short note" }
-  ],
-  "total_carbs": <total for whole ride>,
-  "total_sodium": <total for whole ride>,
-  "field_notes": ["tip 1", "tip 2", "tip 3"],
-  "ratio_note": "why ratio matters here, or empty string",
-  "bottom_line": "1 sentence on consequence of under-fueling",
+  "fluid_per_hour": "e.g. 600-750 ml/hr",
+  "total_carbs": <integer>,
+  "total_sodium": <integer>,
+  "fuel_system": {
+    "type": "pack_based | hybrid | bottle_based",
+    "summary": "1 sentence only — name the primary channel and secondary channel. No math, no gram counts, no scoop counts."
+  },
+  "packing_list": {
+    "required": [
+      { "item": "item name and quantity — no scoop math", "carbs": <integer>, "note": "logistics note only" }
+    ],
+    "optional": [
+      { "item": "optional item", "carbs": <integer>, "note": "when to use it" }
+    ]
+  },
+  "execution": {
+    "continuous": ["sip behavior for pack or bottle — 1 line each"],
+    "discrete": ["gel and solid timing — 1 line each"],
+    "terrain_notes": ["where windows are limited — 1 line each"]
+  },
   "resilience": {
     "classification": "Tight | Moderate | Buffered",
-    "note": "1 sentence explaining why — reference delivery mix and terrain",
+    "note": "1 plain sentence — why, in terms of delivery mix and terrain",
     "front_load": true | false,
-    "front_load_tip": "specific first 20-30min action, or empty string",
-    "warning": "execution fragility warning, or empty string"
+    "front_load_tip": "specific first 20-30min banking action, or empty string",
+    "warning": "plain language execution fragility warning, or empty string"
   },
+  "prep_details": {
+    "containers": [
+      { "container": "e.g. Hydration pack", "contents": "what goes in", "carbs": <integer>, "sodium": <integer> }
+    ],
+    "total_note": "X total carbs, Y total sodium for Zhr"
+  },
+  "ratio_note": "why carb ratio matters here, or empty string",
+  "bottom_line": "1 sentence — consequence of under-fueling this specific ride",
   "stem_card": {
     "pre": "before rolling — max 8 words",
     "during": "background rhythm — max 8 words",
@@ -183,42 +167,49 @@ Return this exact JSON:
   }
 }
 
-RULES:
-- DURATION: Sum every block. Do not round.
-- CARB TARGETS: Push upper end for any ride above Z2. Standard: 85-90g/hr. Gut trained: 110-120g/hr for race efforts. Never 60-80g/hr for hard efforts.
-- FUELING PHILOSOPHY: Protect power output at key moments. Background fueling high enough that gels are top-ups not rescues. Prevent deficit, don't recover from it.
-- SOLID FOOD: First hour or Z2 only. Always flag in note field. Liquid + gels primary for any intensity.
-- SODIUM: Cool 400-600mg/hr. Moderate 600-800mg/hr. Hot 800-1000mg/hr. Never under 400mg/hr.
-- HYDRATION PACK: If ANY pack is in the selected products, it MUST be the first item in pack_list regardless of carb content. Format: "Hydration Pack XL — water only" or "Hydration Pack XL — light mix". Note: "continuous hands-free hydration — frees bottles for concentrated carb mix". Always mention pack in field_notes. A pack fundamentally changes bottle strategy — bottles become carb delivery only, pack handles hydration.
-- DURATION: Always use the explicitly stated duration if given. Do not infer from distance.
-- BOTTLES: Max 2. Fill carb gap with gels and food. Unless hydration pack mentioned.
-- DISCRETE DEPENDENCY: Over 60% from gels/solids = execution-sensitive. Flag in resilience.
-- ROLLING TERRAIN + NO FLAT: Front-load and bias toward continuous sources.
-- RESILIENCE: Use pre-computed data. Tight = high discrete + difficult terrain. Moderate = some buffer. Buffered = continuous dominates or aid access.
-- FRONT LOAD: If true, give specific banking action for first 20-30 min.
-- SHORT RACE <45min: No bottle. Pre-load 1-2 gels.
-- CIRCUIT 45-75min: Pre-load 2 gels. 1 light bottle. 1 spare gel.
-- SHORT CRIT 45-75min: Pre-load all. Water only mid-race.
-- GRAVEL RACE 3-5hr: Self-supported, sodium critical, intake every 20-30 min.
-- LONG RIDE 4hr+: Specific pocket logistics and water stop plan.
-- SALTY SWEATER: +40-60% sodium above standard.
-- MAURTEN: Very low sodium. Flag that sodium must come from other sources if selected.
-- NO PRODUCT INVENTION: Only selected products.
-- ALL BRANDS EQUAL: No brand gets special treatment.
-- GI DISTRESS: Never blame product. It's timing, concentration, intensity, gut training.
-- STEM CARD: Max 8 words per line. Action words. Screenshot-readable.
+DELIVERY MODE RULES (use pre-computed value — do not override):
+- pack_based: pack is primary for fluid AND carbs. Bottles are NOT required. Do not put bottles in packing_list.required.
+- hybrid: pack handles continuous hydration. ONE bottle max as secondary — it goes in packing_list.optional unless rider has no other carb source. Gels are top-ups.
+- bottle_based: no pack. Max 2 bottles. Gels fill carb gap.
+
+CONTRADICTION PREVENTION (section 16 of spec):
+- hybrid or pack_based: never list 2 bottles as required. Max 1 bottle, listed as optional.
+- If pack present: pack is the first item in packing_list.required always.
+- bottle_based: no pack references anywhere.
+- Never make gels the primary carb source unless no bottles or pack are selected.
+
+OUTPUT RULES:
+- fuel_system.summary: conceptual only. No scoop counts, no gram math. Just: primary channel → secondary channel → backup.
+- packing_list: logistics only. What to physically carry. No timing. No nutrition math in items. Math goes in prep_details.
+- execution: split into continuous (sipping), discrete (gel/solid timing), terrain_notes (where windows are limited).
+- prep_details: this is where scoop counts, carb totals per container, and concentration math live. Keep it OUT of packing_list.
+- Explain the fuel system before the ingredients. This is the output order in the JSON and should be the mental model for the rider.
+
+FUELING RULES:
+- DURATION: use explicitly stated duration. Do not infer from distance.
+- CARB TARGETS: push upper end for intensity above Z2. Standard: 85-90g/hr. Gut trained: 110-120g/hr for race efforts.
+- PHILOSOPHY: protect power output at key moments. Gels are top-ups not rescues.
+- SOLID FOOD: first hour or Z2 only. Note it in packing_list item note.
+- SODIUM: Cool 400-600. Moderate 600-800. Hot 800-1000mg/hr.
+- SALTY SWEATER: +40-60% sodium.
+- MAURTEN: very low sodium — flag that sodium must come from other sources.
+- SHORT RACE <45min: no bottle, pre-load 1-2 gels.
+- CIRCUIT 45-75min: pre-load 2 gels, 1 light bottle, 1 spare gel.
+- SHORT CRIT 45-75min: pre-load all, water only mid-race.
+- GRAVEL 3-5hr: self-supported, sodium critical, intake every 20-30min.
+- LONG RIDE 4hr+: pocket logistics and water stop plan.
+- NO PRODUCT INVENTION: only selected products.
+- ALL BRANDS EQUAL.
+- STEM CARD: max 8 words per line, action words, screenshot-readable.
 - Return ONLY the JSON object.`;
 }
 
-// ── ENDPOINT ─────────────────────────────────────────────────────────────────
+// ── ENDPOINT ──────────────────────────────────────────────────────────────────
 
 app.post('/api/fuel', async (req, res) => {
   try {
     const { desc, tempLabel, sweatLabel, gutLabel, products } = req.body;
-
-    if (!desc || !tempLabel) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+    if (!desc || !tempLabel) return res.status(400).json({ error: 'Missing required fields' });
 
     const productList = products && products.length > 0
       ? products.map(p => {
@@ -243,7 +234,7 @@ app.post('/api/fuel', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
+        max_tokens: 2000,
         messages: [{ role: 'user', content: prompt }]
       })
     });

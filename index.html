@@ -674,49 +674,120 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
   }
 
   function renderResult(p){
-    var r = document.getElementById('result'), hours = p.duration_hours || 1, html = '';
+    var r = document.getElementById('result');
+    var hours = p.duration_hours || 1;
+    var html = '';
+
+    // ── TARGETS
     html += '<div class="re">Plan locked</div>';
     html += '<div class="rs">' + (p.ride_summary || '') + '</div>';
     html += '<div class="rbig">' + p.carbs_per_hour + 'g carbs/hr</div>';
     html += '<div class="rmed">' + p.sodium_per_hour + 'mg sodium/hr</div>';
     html += '<div class="rsm">' + (p.fluid_per_hour || '') + '</div>';
-    html += '<div class="rtarget">Target: ' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium &middot; ' + hours + 'hr ride</div>';
+    html += '<div class="rtarget">Target: ' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium &middot; ' + hours + 'hr</div>';
 
-    // Resilience block
+    // ── FUEL SYSTEM
+    if (p.fuel_system) {
+      html += '<div class="rdiv"></div>';
+      var fsColor = { pack_based: '#2D7A3A', hybrid: '#B87A00', bottle_based: '#3B6CB5' }[p.fuel_system.type] || '#666';
+      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">';
+      html += '<div style="background:' + fsColor + ';color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:20px;">' + (p.fuel_system.type || '').replace('_', ' ') + '</div>';
+      html += '</div>';
+      html += '<div style="font-size:14px;font-weight:700;color:rgba(0,0,0,0.85);line-height:1.5;">' + (p.fuel_system.summary || '') + '</div>';
+    }
+
+    // ── RESILIENCE (right after fuel system — before ingredients)
     if (p.resilience) {
       var rc = p.resilience;
       var rcolor = { Tight: '#b42318', Moderate: '#B87A00', Buffered: '#2D7A3A' }[rc.classification] || '#666';
-      html += '<div class="rdiv"></div>';
-      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">';
-      html += '<div style="background:' + rcolor + ';color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:20px;">' + rc.classification + '</div>';
-      html += '<div style="font-size:12px;font-weight:600;color:rgba(0,0,0,0.7);">' + (rc.note || '') + '</div>';
+      html += '<div style="margin-top:10px;display:flex;align-items:flex-start;gap:10px;">';
+      html += '<div style="background:' + rcolor + ';color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:20px;flex-shrink:0;margin-top:1px;">' + rc.classification + '</div>';
+      html += '<div style="font-size:13px;font-weight:600;color:rgba(0,0,0,0.7);line-height:1.5;">' + (rc.note || '') + '</div>';
       html += '</div>';
       if (rc.front_load && rc.front_load_tip) {
-        html += '<div style="font-size:12px;background:rgba(0,0,0,0.08);border-radius:8px;padding:8px 10px;margin-bottom:4px;"><strong>Front-load:</strong> ' + rc.front_load_tip + '</div>';
+        html += '<div style="margin-top:8px;font-size:12px;background:rgba(0,0,0,0.08);border-radius:8px;padding:8px 10px;"><strong>Front-load:</strong> ' + rc.front_load_tip + '</div>';
       }
       if (rc.warning) {
-        html += '<div style="font-size:12px;background:rgba(180,35,24,0.12);border-radius:8px;padding:8px 10px;color:rgba(0,0,0,0.75);"><strong>⚠ </strong>' + rc.warning + '</div>';
+        html += '<div style="margin-top:6px;font-size:12px;background:rgba(180,35,24,0.12);border-radius:8px;padding:8px 10px;color:rgba(0,0,0,0.75);">&#9888; ' + rc.warning + '</div>';
       }
     }
 
-    html += '<div class="rdiv"></div><div class="rsec">Leave with this</div><div class="pack-list">';
-    (p.pack_list || []).forEach(function(item){
-      html += '<div class="pack-item"><div>&#10003; ' + item.item;
-      if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
-      html += '</div>';
-      if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
-      else if (item.item && item.item.toLowerCase().includes('pack')) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">hydration</div>';
-      html += '</div>';
-    });
-    html += '</div>';
-    if (p.total_carbs) html += '<div class="pack-note">' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium total for ' + hours + 'h</div>';
-    html += '<div class="rdiv"></div>';
-    if (p.field_notes && p.field_notes.length){ html += '<div class="rsec">Field notes</div><ul class="fnotes">'; p.field_notes.forEach(function(n){ html += '<li>' + n + '</li>'; }); html += '</ul>'; }
-    if (p.ratio_note){ html += '<div class="rdiv"></div><div class="rsec">Carb ratio matters here</div><div style="font-size:13px;line-height:1.6;font-weight:600;color:rgba(0,0,0,0.8);">' + p.ratio_note + '</div>'; }
-    html += '<div class="tagline">' + (p.bottom_line || 'feel steady, not desperate') + '</div>';
-    r.innerHTML = html; r.style.display = 'block'; document.getElementById('resetBtn').style.display = 'block';
+    // ── PACKING LIST
+    if (p.packing_list) {
+      html += '<div class="rdiv"></div><div class="rsec">Leave with this</div>';
+      if (p.packing_list.required && p.packing_list.required.length) {
+        p.packing_list.required.forEach(function(item) {
+          html += '<div class="pack-item"><div>&#10003; ' + item.item;
+          if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
+          html += '</div>';
+          if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
+          html += '</div>';
+        });
+      }
+      if (p.packing_list.optional && p.packing_list.optional.length) {
+        html += '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.35;margin:10px 0 6px;">Optional</div>';
+        p.packing_list.optional.forEach(function(item) {
+          html += '<div class="pack-item" style="opacity:0.75;"><div>+ ' + item.item;
+          if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
+          html += '</div>';
+          if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
+          html += '</div>';
+        });
+      }
+      if (p.total_carbs) html += '<div class="pack-note">' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium total for ' + hours + 'h</div>';
+    }
 
-    // Stem card
+    // ── EXECUTION
+    if (p.execution) {
+      html += '<div class="rdiv"></div><div class="rsec">On the bike</div>';
+      var ex = p.execution;
+      if (ex.continuous && ex.continuous.length) {
+        html += '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin-bottom:4px;">Continuous</div>';
+        html += '<ul class="fnotes">';
+        ex.continuous.forEach(function(n){ html += '<li>' + n + '</li>'; });
+        html += '</ul>';
+      }
+      if (ex.discrete && ex.discrete.length) {
+        html += '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin:8px 0 4px;">Discrete</div>';
+        html += '<ul class="fnotes">';
+        ex.discrete.forEach(function(n){ html += '<li>' + n + '</li>'; });
+        html += '</ul>';
+      }
+      if (ex.terrain_notes && ex.terrain_notes.length) {
+        html += '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin:8px 0 4px;">Terrain</div>';
+        html += '<ul class="fnotes">';
+        ex.terrain_notes.forEach(function(n){ html += '<li>' + n + '</li>'; });
+        html += '</ul>';
+      }
+    }
+
+    // ── RATIO NOTE
+    if (p.ratio_note) {
+      html += '<div class="rdiv"></div><div class="rsec">Carb ratio matters here</div>';
+      html += '<div style="font-size:13px;line-height:1.6;font-weight:600;color:rgba(0,0,0,0.8);">' + p.ratio_note + '</div>';
+    }
+
+    // ── PREP DETAILS (collapsed)
+    if (p.prep_details && p.prep_details.containers && p.prep_details.containers.length) {
+      html += '<div class="rdiv"></div>';
+      html += '<details style="cursor:pointer;">';
+      html += '<summary style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;opacity:.35;list-style:none;display:flex;align-items:center;gap:6px;">&#9654; Prep details</summary>';
+      html += '<div style="margin-top:10px;">';
+      p.prep_details.containers.forEach(function(c) {
+        html += '<div style="margin-bottom:8px;font-size:12px;"><strong>' + c.container + '</strong> — ' + c.contents;
+        html += '<div class="pack-sub">' + c.carbs + 'g carbs &middot; ' + c.sodium + 'mg Na</div></div>';
+      });
+      if (p.prep_details.total_note) html += '<div class="pack-note">' + p.prep_details.total_note + '</div>';
+      html += '</div></details>';
+    }
+
+    html += '<div class="tagline">' + (p.bottom_line || 'feel steady, not desperate') + '</div>';
+
+    r.innerHTML = html;
+    r.style.display = 'block';
+    document.getElementById('resetBtn').style.display = 'block';
+
+    // ── STEM CARD
     if (p.stem_card) {
       var sc = p.stem_card;
       var scHtml = '<div class="stem-card">';

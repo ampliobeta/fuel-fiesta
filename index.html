@@ -213,8 +213,17 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
   cursor: pointer; margin-top: 8px; -webkit-appearance: none; touch-action: manipulation;
 }
 
-/* STEM CARD */
-.stem-card { background: #1C1C1C; border-radius: 14px; padding: 16px 18px; margin-top: 10px; }
+/* RESULT SECTION CARDS */
+.rsection { background: #fff; border-radius: 12px; padding: 14px 16px; margin-top: 10px; }
+.rsection-label { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #6E6B6A; margin-bottom: 10px; display: block; }
+.rsub-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #B0ACA9; margin: 8px 0 4px; display: block; }
+.rpack-item { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; font-weight: 700; line-height: 1.5; color: #2A2826; margin-bottom: 6px; }
+.rpack-note { font-size: 11px; font-weight: 400; color: #6F6C6B; margin-top: 1px; }
+.rpack-total { font-size: 12px; color: #9A9693; margin-top: 10px; border-top: 1px solid #F0EDEA; padding-top: 8px; }
+.rexec-item { font-size: 13px; line-height: 1.7; color: #3A3A3A; }
+.rexec-item::before { content: '· '; color: #B0ACA9; }
+.roptional-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #B0ACA9; margin: 10px 0 4px; display: block; }
+.rpack-optional { opacity: 0.65; }
 .stem-card-title { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #666; margin-bottom: 12px; }
 .stem-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
 .stem-row:last-child { margin-bottom: 0; }
@@ -495,9 +504,9 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
   <!-- CTA -->
   <div class="card" style="margin-top:8px;">
     <span class="sec-label">Anything else in your kit?</span>
-    <div class="sec-helper">Real food, café stops, whatever you've got. The Big Boss will make it make sense.</div>
+    <div class="sec-helper">Real food, café stops, whatever you've got. The big boss will factor it in.</div>
     <textarea id="otherFood" placeholder="e.g. rice cakes, bananas, sweet potatoes&#10;e.g. big lunch stop at the turnaround&#10;e.g. café stop every 40km, eating whatever's available&#10;e.g. chocolate cake, flat Coke, peanut butter sandwich" style="width:100%;min-height:80px;background:#FDF0EB;border:1.5px solid #F0C4B0;border-radius:10px;color:#2A2826;font-size:14px;line-height:1.6;padding:12px;resize:none;font-family:inherit;-webkit-appearance:none;" onfocus="this.style.borderColor='#F47C4A'" onblur="this.style.borderColor='#F0C4B0'"></textarea>
-    <div class="micro">No need to look up nutrition — just describe it naturally</div>
+    <div class="micro">Food and stops only — select bottles and packs from the kit list above</div>
   </div>
 
   <div class="card" style="margin-top:4px;">
@@ -721,73 +730,74 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       }
     }
 
-    // ── PACKING LIST
+    // ── PACKING LIST — white card
     if (p.packing_list) {
-      html += '<div class="rdiv"></div><div class="rsec">Leave with this</div>';
+      html += '<div class="rsection">';
+      html += '<span class="rsection-label">Leave with this</span>';
       if (p.packing_list.required && p.packing_list.required.length) {
         p.packing_list.required.forEach(function(item) {
-          html += '<div class="pack-item"><div>&#10003; ' + item.item;
-          if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
+          html += '<div class="rpack-item"><div>&#10003; ' + item.item;
+          if (item.note) html += '<div class="rpack-note">' + item.note + '</div>';
           html += '</div>';
-          if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
+          if (item.carbs > 0) html += '<div style="white-space:nowrap;margin-left:8px;font-size:12px;color:#9A9693;">' + item.carbs + 'g</div>';
           html += '</div>';
         });
       }
       if (p.packing_list.optional && p.packing_list.optional.length) {
-        html += '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.35;margin:10px 0 6px;">Optional</div>';
+        html += '<span class="roptional-label">Optional</span>';
         p.packing_list.optional.forEach(function(item) {
-          html += '<div class="pack-item" style="opacity:0.75;"><div>+ ' + item.item;
-          if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
+          html += '<div class="rpack-item rpack-optional"><div>+ ' + item.item;
+          if (item.note) html += '<div class="rpack-note">' + item.note + '</div>';
           html += '</div>';
-          if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
+          if (item.carbs > 0) html += '<div style="white-space:nowrap;margin-left:8px;font-size:12px;color:#9A9693;">' + item.carbs + 'g</div>';
           html += '</div>';
         });
       }
-      if (p.total_carbs) html += '<div class="pack-note">' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium total for ' + hours + 'h</div>';
+      if (p.total_carbs) html += '<div class="rpack-total">' + p.total_carbs + 'g carbs &middot; ' + (p.total_sodium || '—') + 'mg sodium total for ' + hours + 'h</div>';
+      html += '</div>';
     }
 
-    // ── EXECUTION
+    // ── EXECUTION — white card
     if (p.execution) {
-      html += '<div class="rdiv"></div><div class="rsec">On the bike</div>';
+      html += '<div class="rsection">';
+      html += '<span class="rsection-label">On the bike</span>';
       var ex = p.execution;
       if (ex.continuous && ex.continuous.length) {
-        html += '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin-bottom:4px;">Continuous</div>';
-        html += '<ul class="fnotes">';
-        ex.continuous.forEach(function(n){ html += '<li>' + n + '</li>'; });
-        html += '</ul>';
+        html += '<span class="rsub-label">Continuous</span>';
+        ex.continuous.forEach(function(n){ html += '<div class="rexec-item">' + n + '</div>'; });
       }
       if (ex.discrete && ex.discrete.length) {
-        html += '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin:8px 0 4px;">Discrete</div>';
-        html += '<ul class="fnotes">';
-        ex.discrete.forEach(function(n){ html += '<li>' + n + '</li>'; });
-        html += '</ul>';
+        html += '<span class="rsub-label">Discrete</span>';
+        ex.discrete.forEach(function(n){ html += '<div class="rexec-item">' + n + '</div>'; });
       }
       if (ex.terrain_notes && ex.terrain_notes.length) {
-        html += '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.4;margin:8px 0 4px;">Terrain</div>';
-        html += '<ul class="fnotes">';
-        ex.terrain_notes.forEach(function(n){ html += '<li>' + n + '</li>'; });
-        html += '</ul>';
+        html += '<span class="rsub-label">Terrain</span>';
+        ex.terrain_notes.forEach(function(n){ html += '<div class="rexec-item">' + n + '</div>'; });
       }
+      html += '</div>';
     }
 
-    // ── RATIO NOTE
+    // ── RATIO NOTE — white card
     if (p.ratio_note) {
-      html += '<div class="rdiv"></div><div class="rsec">Carb ratio matters here</div>';
-      html += '<div style="font-size:13px;line-height:1.6;font-weight:600;color:rgba(0,0,0,0.8);">' + p.ratio_note + '</div>';
+      html += '<div class="rsection">';
+      html += '<span class="rsection-label">Carb ratio matters here</span>';
+      html += '<div style="font-size:13px;line-height:1.6;font-weight:600;color:#2A2826;">' + p.ratio_note + '</div>';
+      html += '</div>';
     }
 
-    // ── PREP DETAILS (collapsed)
+    // ── PREP DETAILS — white card, collapsed
     if (p.prep_details && p.prep_details.containers && p.prep_details.containers.length) {
-      html += '<div class="rdiv"></div>';
-      html += '<details style="cursor:pointer;">';
-      html += '<summary style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;opacity:.35;list-style:none;display:flex;align-items:center;gap:6px;">&#9654; Prep details</summary>';
+      html += '<div class="rsection">';
+      html += '<details><summary style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#6E6B6A;list-style:none;cursor:pointer;">&#9654; Prep details</summary>';
       html += '<div style="margin-top:10px;">';
       p.prep_details.containers.forEach(function(c) {
-        html += '<div style="margin-bottom:8px;font-size:12px;"><strong>' + c.container + '</strong> — ' + c.contents;
-        html += '<div class="pack-sub">' + c.carbs + 'g carbs &middot; ' + c.sodium + 'mg Na</div></div>';
+        html += '<div style="margin-bottom:8px;font-size:13px;font-weight:700;color:#2A2826;">' + c.container + '</div>';
+        html += '<div style="font-size:12px;color:#6F6C6B;margin-bottom:2px;">' + c.contents + '</div>';
+        html += '<div style="font-size:11px;color:#B0ACA9;">' + c.carbs + 'g carbs &middot; ' + c.sodium + 'mg Na</div>';
       });
-      if (p.prep_details.total_note) html += '<div class="pack-note">' + p.prep_details.total_note + '</div>';
+      if (p.prep_details.total_note) html += '<div class="rpack-total" style="margin-top:10px;">' + p.prep_details.total_note + '</div>';
       html += '</div></details>';
+      html += '</div>';
     }
 
     html += '<div class="tagline">' + (p.bottom_line || 'feel steady, not desperate') + '</div>';

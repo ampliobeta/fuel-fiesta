@@ -199,7 +199,8 @@ FUELING RULES:
 - SHORT CRIT 45-75min: pre-load all, water only mid-race.
 - GRAVEL 3-5hr: self-supported, sodium critical, intake every 20-30min.
 - LONG RIDE 4hr+: pocket logistics and water stop plan.
-- NO PRODUCT INVENTION: only selected products.
+- NO PRODUCT INVENTION: ONLY use products explicitly selected in the kit builder or described in the other foods field. NEVER invent a hydration pack, bottle, gel, sports drink, drink mix, or any gear the rider did not select. If no drink mix was selected, do not reference "sports drink mix" or any generic drink — use "water" or note that a drink mix would help and suggest adding one from the kit. If no pack was selected, do not mention a pack. If no bottle was selected, do not mention bottles. This is absolute.
+- IF THE PLAN SEEMS INADEQUATE: If selected products clearly cannot meet carb or sodium targets, say so plainly in the warning field and recommend what type of product to add — but do not invent it. Example: "This plan falls short of carb targets — consider adding a drink mix or gels from the kit builder."
 - ALL BRANDS EQUAL.
 - STEM CARD: max 8 words per line, action words, screenshot-readable.
 - Return ONLY the JSON object.`;

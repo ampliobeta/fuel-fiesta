@@ -318,6 +318,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
     <button class="chip" data-filter="food">Real Food</button>
     <button class="chip" data-filter="diy">DIY</button>
     <button class="chip" data-filter="sodium">Sodium</button>
+    <button class="chip" data-filter="pack">Pack</button>
   </div>
 
   <!-- DRINK MIX -->
@@ -463,6 +464,34 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
     </div></div>
   </div>
 
+  <!-- HYDRATION PACK -->
+  <div class="accordion" data-category="pack">
+    <div class="accordion-hdr"><div class="acc-title">Hydration Pack</div><div class="acc-meta"><span class="acc-count" id="count-pack"></span><span class="acc-chevron">▼</span></div></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="product-row" data-product="pack-1l" data-carbs="0" data-sodium="0" data-type="pack" data-unit="pack" data-name="Hydration Pack 1L (water only)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 1L</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">Water only</span></div></div>
+      </div>
+      <div class="product-row" data-product="pack-1l-mix" data-carbs="30" data-sodium="200" data-type="pack" data-unit="pack" data-name="Hydration Pack 1L (light mix)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 1L + light mix</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">~30g</span><span class="badge b-sodium">~200mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="pack-1-5l" data-carbs="0" data-sodium="0" data-type="pack" data-unit="pack" data-name="Hydration Pack 1.5L (water only)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 1.5L</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">Water only</span></div></div>
+      </div>
+      <div class="product-row" data-product="pack-1-5l-mix" data-carbs="45" data-sodium="300" data-type="pack" data-unit="pack" data-name="Hydration Pack 1.5L (light mix)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 1.5L + light mix</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">~45g</span><span class="badge b-sodium">~300mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="pack-2l" data-carbs="0" data-sodium="0" data-type="pack" data-unit="pack" data-name="Hydration Pack 2L (water only)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 2L</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">Water only</span></div></div>
+      </div>
+      <div class="product-row" data-product="pack-2l-mix" data-carbs="60" data-sodium="400" data-type="pack" data-unit="pack" data-name="Hydration Pack 2L (light mix)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 2L + light mix</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">~60g</span><span class="badge b-sodium">~400mg Na</span></div></div>
+      </div>
+      <div class="product-row" data-product="pack-3l" data-carbs="0" data-sodium="0" data-type="pack" data-unit="pack" data-name="Hydration Pack 3L (water only)">
+        <div class="pcheck"></div><div class="pinfo"><div class="pname">Hydration Pack — 3L</div><div class="pbadges"><span class="badge b-ratio">Continuous</span><span class="badge b-carb">Water only</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
   <!-- CTA -->
   <div class="card" style="margin-top:8px;">
     <button type="button" class="cta" id="goBtn">Build My Plan</button>
@@ -587,7 +616,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
   });
 
   function updateCounts(){
-    ['bottle','gel','bar','food','diy','sodium'].forEach(function(cat){
+    ['bottle','gel','bar','food','diy','sodium','pack'].forEach(function(cat){
       var el = document.getElementById('count-' + cat); if (!el) return;
       var visible = document.querySelectorAll('.accordion[data-category="' + cat + '"] .product-row:not(.hidden)').length;
       var sel = document.querySelectorAll('.accordion[data-category="' + cat + '"] .product-row.selected').length;
@@ -676,6 +705,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       if (item.note) html += '<div class="pack-sub">' + item.note + '</div>';
       html += '</div>';
       if (item.carbs > 0) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">' + item.carbs + 'g</div>';
+      else if (item.item && item.item.toLowerCase().includes('pack')) html += '<div class="pack-sub" style="white-space:nowrap;margin-left:8px;">hydration</div>';
       html += '</div>';
     });
     html += '</div>';

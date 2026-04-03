@@ -807,6 +807,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
     document.getElementById('resetBtn').style.display = 'block';
 
     // ── STEM CARD
+    document.querySelectorAll('.stem-card').forEach(function(el){ el.remove(); });
     if (p.stem_card) {
       var sc = p.stem_card;
       var scHtml = '<div class="stem-card">';

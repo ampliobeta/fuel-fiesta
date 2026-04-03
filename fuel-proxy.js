@@ -92,7 +92,7 @@ function computeResilience(products, rideDesc) {
 
 // ── PROMPT BUILDER ────────────────────────────────────────────────────────────
 
-function buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience }) {
+function buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience, otherFoodStr }) {
   const dm = resilience ? resilience.delivery_mode : 'bottle_based';
   const resCtx = resilience ? `
 Pre-computed system analysis (do not override):
@@ -115,6 +115,7 @@ Sweat profile: ${sweatLabel}
 Gut capacity: ${gutLabel}
 Available products:
 ${productList}
+${otherFoodStr || ''}
 ${delCtx}
 ${resCtx}
 
@@ -208,8 +209,10 @@ FUELING RULES:
 
 app.post('/api/fuel', async (req, res) => {
   try {
-    const { desc, tempLabel, sweatLabel, gutLabel, products } = req.body;
+    const { desc, tempLabel, sweatLabel, gutLabel, products, otherFood } = req.body;
     if (!desc || !tempLabel) return res.status(400).json({ error: 'Missing required fields' });
+
+    const otherFoodStr = otherFood ? `\nAdditional foods / stops the rider has access to (reason about nutrition naturally — you know these foods):\n${otherFood}` : '';
 
     const productList = products && products.length > 0
       ? products.map(p => {
@@ -223,7 +226,7 @@ app.post('/api/fuel', async (req, res) => {
       : null;
 
     const resilience = computeResilience(products, desc);
-    const prompt = buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience });
+    const prompt = buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience, otherFoodStr });
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

@@ -199,8 +199,10 @@ FUELING RULES:
 - SHORT CRIT 45-75min: pre-load all, water only mid-race.
 - GRAVEL 3-5hr: self-supported, sodium critical, intake every 20-30min.
 - LONG RIDE 4hr+: pocket logistics and water stop plan.
-- NO PRODUCT INVENTION: ONLY use products explicitly selected in the kit builder or described in the other foods field. NEVER invent a hydration pack, bottle, gel, sports drink, drink mix, or any gear the rider did not select. If no drink mix was selected, do not reference "sports drink mix" or any generic drink — use "water" or note that a drink mix would help and suggest adding one from the kit. If no pack was selected, do not mention a pack. If no bottle was selected, do not mention bottles. This is absolute.
-- IF THE PLAN SEEMS INADEQUATE: If selected products clearly cannot meet carb or sodium targets, say so plainly in the warning field and recommend what type of product to add — but do not invent it. Example: "This plan falls short of carb targets — consider adding a drink mix or gels from the kit builder."
+- BOTTLES WITH NO DRINK MIX: If the rider mentions bottles in their ride description but has selected no drink mix product — those bottles carry water only. Do not reference any drink mix. Add to resilience.warning: "Bottles will carry water only — no drink mix selected. Add one from the kit builder to hit carb targets."
+- NO PRODUCT INVENTION: ONLY use products explicitly selected in the kit builder or described in the other foods field. NEVER invent a hydration pack, bottle, gel, sports drink mix, or any gear not selected. NEVER use phrases like "sports drink mix", "carb drink", "electrolyte drink" unless a specific product was selected. If nothing was selected, the rider has water and whatever real food they described. Build the plan around that and flag the gap.
+- IF THE PLAN SEEMS INADEQUATE: Say so plainly in resilience.warning. Recommend what type of product to add — but never invent it.
+- OTHER FOODS: Items in the other foods field are real food only. Reason about nutrition naturally. Do not treat them as gear.
 - ALL BRANDS EQUAL.
 - STEM CARD: max 8 words per line, action words, screenshot-readable.
 - Return ONLY the JSON object.`;

@@ -199,10 +199,8 @@ FUELING RULES:
 - SHORT CRIT 45-75min: pre-load all, water only mid-race.
 - GRAVEL 3-5hr: self-supported, sodium critical, intake every 20-30min.
 - LONG RIDE 4hr+: pocket logistics and water stop plan.
-- BOTTLES WITH NO DRINK MIX: If the rider mentions bottles in their ride description but has selected no drink mix product — those bottles carry water only. Do not reference any drink mix. Add to resilience.warning: "Bottles will carry water only — no drink mix selected. Add one from the kit builder to hit carb targets."
 - NO PRODUCT INVENTION: ONLY use products explicitly selected in the kit builder or described in the other foods field. NEVER invent a hydration pack, bottle, gel, sports drink mix, or any gear not selected. NEVER use phrases like "sports drink mix", "carb drink", "electrolyte drink" unless a specific product was selected. If nothing was selected, the rider has water and whatever real food they described. Build the plan around that and flag the gap.
-- IF THE PLAN SEEMS INADEQUATE: Say so plainly in resilience.warning. Recommend what type of product to add — but never invent it.
-- OTHER FOODS: Items in the other foods field are real food only. Reason about nutrition naturally. Do not treat them as gear.
+- MISSING PRODUCTS — SUGGEST DON'T INVENT: If the ride clearly needs a product type the rider hasn't selected, do not include it in the packing list. Instead put a plain suggestion in resilience.warning. Examples: "No gels selected — for efforts this long you'll want something between stops. Consider adding a gel from the kit above." or "No drink mix selected — bottles will carry water only. A drink mix would help hit carb targets — add one from the kit above." or "No electrolytes selected — consider adding a salt cap from the kit above for a ride this long in these conditions." The suggestion points back to the kit builder. It never invents the product or quantifies it.
 - ALL BRANDS EQUAL.
 - STEM CARD: max 8 words per line, action words, screenshot-readable.
 - Return ONLY the JSON object.`;

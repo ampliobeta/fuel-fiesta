@@ -194,9 +194,12 @@ FUELING RULES:
 - SODIUM: Cool 400-600. Moderate 600-800. Hot 800-1000mg/hr.
 - SALTY SWEATER: +40-60% sodium.
 - MAURTEN: very low sodium — flag that sodium must come from other sources.
-- SHORT RACE <45min: no bottle, pre-load 1-2 gels.
-- CIRCUIT 45-75min: pre-load 2 gels, 1 light bottle, 1 spare gel.
-- SHORT CRIT 45-75min: pre-load all, water only mid-race.
+
+CRITICAL SHORT RACE RULES — these override everything else for races under 90 minutes:
+- CYCLOCROSS (CX): CX is a 45-75min all-out effort. Riders carry bikes, run barriers, and race at or near VO2max the entire time. There are NO mid-race fueling windows. NO bottle access during the race. NO gel opportunities. Everything must be done BEFORE the race. The plan is: eat a proper meal 3 hours before, pre-load 2-3 gels in the 30 minutes before the start, drink a full bottle before the whistle, and race. Nothing goes in the packing list except pre-race items. The execution section describes only pre-race actions. Continuous sipping during a CX race is not possible — do not suggest it.
+- SHORT RACE <45min: no bottle, pre-load 1-2 gels before start only. Gut shuts down at race pace.
+- CIRCUIT RACE 45-75min with laps: pre-load 2 gels, 1 light bottle only if there are pit lane access or feed zones. Otherwise pre-load only.
+- SHORT CRIT 45-75min punchy course: pre-load everything before start. Water only if anything mid-race. No gel windows at crit pace.
 - GRAVEL 3-5hr: self-supported, sodium critical, intake every 20-30min.
 - LONG RIDE 4hr+: pocket logistics and water stop plan.
 - NO PRODUCT INVENTION: ONLY use products explicitly selected in the kit builder or described in the other foods field. NEVER invent a hydration pack, bottle, gel, sports drink mix, or any gear not selected. NEVER use phrases like "sports drink mix", "carb drink", "electrolyte drink" unless a specific product was selected. If nothing was selected, the rider has water and whatever real food they described. Build the plan around that and flag the gap.

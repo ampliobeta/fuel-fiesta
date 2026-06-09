@@ -256,10 +256,10 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
     display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 20px;
   }
   .weight-input-row input {
-    width: 100px; font-size: 28px; font-weight: 900; text-align: center;
-    border: 2px solid var(--border); border-radius: 12px; padding: 10px 8px;
+    width: 130px; font-size: 32px; font-weight: 900; text-align: center;
+    border: 2px solid var(--border); border-radius: 12px; padding: 14px 8px;
     -webkit-appearance: none; -moz-appearance: textfield; appearance: none;
-    outline: none; font-family: inherit;
+    outline: none; font-family: inherit; cursor: text;
   }
   .weight-input-row input::-webkit-outer-spin-button,
   .weight-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -617,7 +617,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
     document.getElementById('weightOverlay').classList.add('active');
     var inp = document.getElementById('weightInput');
     if (savedWeight) inp.value = savedWeight;
-    setTimeout(function(){ inp.focus(); }, 100);
+    // iOS won't open keyboard on programmatic focus — user taps the field
   }
   function hideWeightModal() {
     document.getElementById('weightOverlay').classList.remove('active');

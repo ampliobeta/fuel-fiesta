@@ -258,8 +258,11 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
   .weight-input-row input {
     width: 100px; font-size: 28px; font-weight: 900; text-align: center;
     border: 2px solid var(--border); border-radius: 12px; padding: 10px 8px;
-    -webkit-appearance: none; outline: none; font-family: inherit;
+    -webkit-appearance: none; -moz-appearance: textfield; appearance: none;
+    outline: none; font-family: inherit;
   }
+  .weight-input-row input::-webkit-outer-spin-button,
+  .weight-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .weight-input-row input:focus { border-color: var(--orange); }
   .weight-input-row span { font-size: 16px; font-weight: 700; color: var(--muted); }
   .weight-save-btn {
@@ -288,7 +291,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       <button type="button" class="unit-btn" id="unitKg">kg</button>
     </div>
     <div class="weight-input-row">
-      <input type="number" id="weightInput" placeholder="175" min="30" max="400" inputmode="numeric" />
+      <input type="text" id="weightInput" placeholder="175" inputmode="decimal" autocomplete="off" />
       <span id="weightUnitLabel">lbs</span>
     </div>
     <button class="weight-save-btn" id="weightSaveBtn">Got it</button>
@@ -620,7 +623,8 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
     document.getElementById('weightOverlay').classList.remove('active');
   }
   function saveWeight() {
-    var val = parseInt(document.getElementById('weightInput').value);
+    var raw = document.getElementById('weightInput').value.replace(/[^0-9]/g, '');
+    var val = parseInt(raw);
     var minVal = savedUnit === 'kg' ? 30 : 80;
     var maxVal = savedUnit === 'kg' ? 180 : 400;
     if (!val || val < minVal || val > maxVal) return;

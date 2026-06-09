@@ -28,6 +28,7 @@
   --peach-border: #E8907F;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+input, textarea { -webkit-user-select: text; user-select: text; }
 html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 .wrap { max-width: 600px; margin: 0 auto; padding: 40px 16px 60px; }
 
@@ -291,7 +292,7 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
       <button type="button" class="unit-btn" id="unitKg">kg</button>
     </div>
     <div class="weight-input-row">
-      <input type="text" id="weightInput" placeholder="175" inputmode="decimal" autocomplete="off" />
+      <input type="text" id="weightInput" placeholder="175" inputmode="decimal" autocomplete="off" style="-webkit-user-select:text;user-select:text;pointer-events:auto;touch-action:auto;" />
       <span id="weightUnitLabel">lbs</span>
     </div>
     <button class="weight-save-btn" id="weightSaveBtn">Got it</button>

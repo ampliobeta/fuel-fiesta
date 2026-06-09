@@ -92,7 +92,7 @@ function computeResilience(products, rideDesc) {
 
 // ── PROMPT BUILDER ────────────────────────────────────────────────────────────
 
-function buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience, otherFoodStr }) {
+function buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience, otherFoodStr, weightStr }) {
   const dm = resilience ? resilience.delivery_mode : 'bottle_based';
   const resCtx = resilience ? `
 Pre-computed system analysis (do not override):
@@ -109,7 +109,7 @@ Pre-computed system analysis (do not override):
 
   return `You are a no-nonsense cycling nutritionist building a rideable fueling system. Return ONLY a JSON object — no markdown, no explanation.
 
-Ride: ${desc}
+Ride: ${desc}${weightStr}
 Conditions: ${tempLabel}
 Sweat profile: ${sweatLabel}
 Gut capacity: ${gutLabel}
@@ -214,7 +214,7 @@ CRITICAL SHORT RACE RULES — these override everything else for races under 90 
 
 app.post('/api/fuel', async (req, res) => {
   try {
-    const { desc, tempLabel, sweatLabel, gutLabel, products, otherFood } = req.body;
+    const { desc, tempLabel, sweatLabel, gutLabel, products, otherFood, weightKg, weightDisplay } = req.body;
     if (!desc || !tempLabel) return res.status(400).json({ error: 'Missing required fields' });
 
     const otherFoodStr = otherFood ? `\nAdditional foods / stops the rider has access to (reason about nutrition naturally — you know these foods):\n${otherFood}` : '';
@@ -231,7 +231,8 @@ app.post('/api/fuel', async (req, res) => {
       : null;
 
     const resilience = computeResilience(products, desc);
-    const prompt = buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience, otherFoodStr });
+    const weightStr = weightKg ? `\nRider weight: ${weightDisplay} (${weightKg} kg). Use this for any weight-based calculations (e.g. pre-ride carb loading targets, post-ride recovery).` : '';
+    const prompt = buildPrompt({ desc, tempLabel, sweatLabel, gutLabel, productList, deliveryContext, resilience, otherFoodStr, weightStr });
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

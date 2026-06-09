@@ -146,9 +146,72 @@
     font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
     cursor: pointer; margin-top: 10px; -webkit-appearance: none; touch-action: manipulation;
   }
+
+  /* WEIGHT MODAL */
+  .weight-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    z-index: 100; align-items: center; justify-content: center;
+  }
+  .weight-overlay.active { display: flex; }
+  .weight-modal {
+    background: #fff; border-radius: 20px; padding: 32px 24px 24px;
+    max-width: 320px; width: 90%; text-align: center;
+  }
+  .weight-modal h2 {
+    font-size: 22px; font-weight: 900; margin: 0 0 8px; letter-spacing: 1px;
+  }
+  .weight-modal p {
+    font-size: 14px; color: var(--muted); margin: 0 0 20px; line-height: 1.5;
+  }
+  .weight-input-row {
+    display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 20px;
+  }
+  .weight-input-row input {
+    width: 100px; font-size: 28px; font-weight: 900; text-align: center;
+    border: 2px solid #e0e0e0; border-radius: 12px; padding: 10px 8px;
+    -webkit-appearance: none; appearance: none; outline: none;
+  }
+  .weight-input-row input:focus { border-color: var(--orange); }
+  .weight-input-row span { font-size: 16px; font-weight: 700; color: var(--muted); }
+  .weight-save-btn {
+    width: 100%; background: var(--orange); color: #fff; border: none;
+    border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 900;
+    letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+    -webkit-appearance: none; touch-action: manipulation;
+  }
+  .weight-save-btn:active { background: var(--orange-dim); }
+  .unit-btn {
+    flex: 1; max-width: 80px; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;
+    background: #fff; font-size: 15px; font-weight: 800; color: var(--muted);
+    cursor: pointer; -webkit-appearance: none; touch-action: manipulation;
+  }
+  .unit-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+  .weight-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--muted); margin-top: 16px; cursor: pointer;
+    border-bottom: 1px dashed #ccc; padding-bottom: 1px;
+  }
 </style>
 </head>
 <body>
+
+<!-- WEIGHT MODAL -->
+<div class="weight-overlay" id="weightOverlay">
+  <div class="weight-modal">
+    <h2>One quick thing.</h2>
+    <p>What's your weight? We'll use it to personalize your fueling targets and never ask again.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
+      <button type="button" class="unit-btn active" id="unitLbs">lbs</button>
+      <button type="button" class="unit-btn" id="unitKg">kg</button>
+    </div>
+    <div class="weight-input-row">
+      <input type="number" id="weightInput" placeholder="175" min="30" max="400" inputmode="numeric" />
+      <span id="weightUnitLabel">lbs</span>
+    </div>
+    <button class="weight-save-btn" id="weightSaveBtn">Got it</button>
+  </div>
+</div>
+
 <div class="wrap">
 
   <div class="header">
@@ -158,6 +221,9 @@
       <div class="logo-bar"></div>
     </div>
     <div class="sub">no bullshit mode</div>
+    <div id="weightBadge" class="weight-badge" style="display:none;">
+      <span id="weightBadgeText"></span> · tap to update
+    </div>
   </div>
 
   <!-- DESCRIBE YOUR RIDE -->
@@ -311,6 +377,87 @@
 (function(){
   var temp = null;
 
+  // ── WEIGHT ────────────────────────────────────────────────────────────────
+  // Migrate old key if present
+  if (!localStorage.getItem('fc_weight_val') && localStorage.getItem('fc_weight_lbs')) {
+    localStorage.setItem('fc_weight_val', localStorage.getItem('fc_weight_lbs'));
+    localStorage.setItem('fc_weight_unit', 'lbs');
+  }
+  var savedWeight = localStorage.getItem('fc_weight_val');
+  var savedUnit   = localStorage.getItem('fc_weight_unit') || 'lbs';
+
+  function setUnit(unit) {
+    savedUnit = unit;
+    document.getElementById('weightUnitLabel').textContent = unit;
+    document.getElementById('weightInput').placeholder = unit === 'lbs' ? '175' : '80';
+    document.getElementById('unitLbs').classList.toggle('active', unit === 'lbs');
+    document.getElementById('unitKg').classList.toggle('active',  unit === 'kg');
+  }
+
+  function showWeightModal() {
+    setUnit(savedUnit);
+    document.getElementById('weightOverlay').classList.add('active');
+    var inp = document.getElementById('weightInput');
+    if (savedWeight) inp.value = savedWeight;
+    inp.focus();
+  }
+
+  function hideWeightModal() {
+    document.getElementById('weightOverlay').classList.remove('active');
+  }
+
+  function saveWeight() {
+    var val = parseInt(document.getElementById('weightInput').value);
+    var minVal = savedUnit === 'kg' ? 30 : 80;
+    var maxVal = savedUnit === 'kg' ? 180 : 400;
+    if (!val || val < minVal || val > maxVal) return;
+    savedWeight = String(val);
+    localStorage.setItem('fc_weight_val', savedWeight);
+    localStorage.setItem('fc_weight_unit', savedUnit);
+    updateWeightBadge();
+    hideWeightModal();
+  }
+
+  function updateWeightBadge() {
+    var badge = document.getElementById('weightBadge');
+    var text  = document.getElementById('weightBadgeText');
+    if (savedWeight) {
+      text.textContent = savedWeight + ' ' + savedUnit;
+      badge.style.display = 'inline-flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // Show modal on first visit
+  if (!savedWeight) {
+    showWeightModal();
+  } else {
+    updateWeightBadge();
+  }
+
+  var weightSaveBtn = document.getElementById('weightSaveBtn');
+  weightSaveBtn.addEventListener('click', saveWeight);
+  weightSaveBtn.addEventListener('touchend', function(e){ e.preventDefault(); saveWeight(); }, { passive: false });
+
+  // Unit toggle buttons
+  document.getElementById('unitLbs').addEventListener('click', function(){ setUnit('lbs'); });
+  document.getElementById('unitKg').addEventListener('click',  function(){ setUnit('kg');  });
+
+  // Badge tap to reopen modal
+  document.getElementById('weightBadge').addEventListener('click', showWeightModal);
+  document.getElementById('weightBadge').addEventListener('touchend', function(e){ e.preventDefault(); showWeightModal(); }, { passive: false });
+
+  // Close overlay on background tap
+  document.getElementById('weightOverlay').addEventListener('click', function(e){
+    if (e.target === this && savedWeight) hideWeightModal();
+  });
+
+  // Allow Enter key in weight input
+  document.getElementById('weightInput').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') saveWeight();
+  });
+
   // Conditions
   document.querySelectorAll('.choice').forEach(function(btn){
     function go(e){
@@ -375,9 +522,13 @@
     var durationOverride = parseFloat(document.getElementById('rideDuration').value);
     var durationLine = isNaN(durationOverride) ? '' : 'Rider confirms total duration is exactly ' + durationOverride + ' hours. Use this figure exactly — do not recalculate.\n';
 
+    var weightKg = savedWeight ? (savedUnit === 'kg' ? parseInt(savedWeight) : Math.round(parseInt(savedWeight) / 2.205)) : null;
+    var weightLine = weightKg ? 'Rider weight: ' + savedWeight + ' ' + savedUnit + ' (' + weightKg + ' kg). Use this for any weight-based calculations (e.g. pre-ride carb loading targets).\n' : '';
+
     var prompt = 'You are a no-nonsense cycling nutritionist. A rider has described their ride and listed what they have available. Return ONLY a JSON object — no markdown, no explanation.\n\n' +
       'Ride: ' + desc + '\n' +
       durationLine +
+      weightLine +
       'Conditions: ' + tempLabel + '\n' +
       'Available products:\n' + productList + '\n\n' +
       'Return this exact JSON structure:\n' +
